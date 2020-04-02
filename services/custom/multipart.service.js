@@ -1,0 +1,40 @@
+var path = require('path');
+var multer = require('multer');
+
+const fileStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        switch (file.fieldname) {
+            case 'dp':
+                cb(null, `${process.env.POST_RESOURCE_BASE_PATH}dp`);
+                break;
+            case 'products':
+                cb(null, `${process.env.POST_RESOURCE_BASE_PATH}product`);
+                break;
+            case 'category':
+                cb(null, `${process.env.POST_RESOURCE_BASE_PATH}category`);
+                break;
+            default:
+                cb(null, `${process.env.POST_RESOURCE_BASE_PATH}`);
+                break;
+
+        }
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}${path.extname(file.originalname)}`);
+    }
+});
+
+var loadMulter = multer({
+    storage: fileStorage,
+    fileFilter: function (req, file, cb) {
+        if (file.size > (5 * 1024 * 1024)) {
+            var e = new Error('File size is should not exceet 5Mb');
+            e.name = 'FileValidationError';
+            return cb(e, false);
+        }
+        cb(null, true);
+    },
+    limits: { fileSize: (5 * 1024 * 1024) }
+});
+
+module.exports = { loadMulter };

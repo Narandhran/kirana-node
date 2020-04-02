@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            padding: 2%;
+        }
+        
+        p:nth-child(2) {
+            color: green;
+            font-size: 1.2rem;
+            margin-left: 2%;
+        }
+        
+        .order-details {
+            background: whitesmoke;
+            padding: 2%;
+            display: flex;
+            justify-content: space-between;
+            border-radius: 7px;
+        }
+        
+        button {
+            width: 14vw;
+            line-height: 36px;
+            background: #ffa500db;
+            border-radius: 5px;
+            color: white;
+            font-size: medium;
+        }
+        
+        .right-section {
+            text-align: right;
+        }
+        
+        a {
+            text-decoration: none;
+            color: unset;
+        }
+    </style>
+</head>
+<body>
+    
+    <p>Hi Admin,</p>
+    <p>An Order has been placed from the user {{userFullname}}, order id for this order is as below.</p>
+    
+    <div class="order-details">
+        <div class="left-section">
+            <p>Order ID : {{this.orderId}}</p>
+            <button> <a  href="https://www.neerwash.com/cart"> View details</a></button>
+        </div>
+        <div class="right-section">
+            <p>Subtotal: &#8377; {{this.subTotal}}</p>
+            <p>Tax: &#8377; {{this.tax}}</p>
+            <p> <strong> Total: &#8377; {{this.total}}</strong></p>
+        </div>
+    </div>
+    
+</body>
+</html>
