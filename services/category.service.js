@@ -26,11 +26,18 @@ module.exports = {
             });
     },
     updateCategoryById: async (request, cb) => {
-        await Category
-            .findByIdAndUpdate(request.params.id, request.body, { new: true })
-            .exec((err, result) => {
-                cb(err, result);
-            });
+        let upload = loadMulter.single('category');
+        await upload(request, null, (err) => {
+            if (err)
+                cb(err);
+            else {
+                let persisted = JSON.parse(request.body.textField);
+                persisted.picture = request.file.filename;
+                Category.findByIdAndUpdate(persisted, (err, result) => {
+                    cb(err, result);
+                });
+            }
+        });
     },
     deleteCategoryById: async (request, cb) => {
         await Product.deleteMany({ category_id: request.params.id }).lean();

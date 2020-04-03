@@ -40,7 +40,6 @@ var userSchema = new Schema({
     mobile_uuid: {
         type: String,
         default: undefined,
-        unique: true,
         maxlength: 40
     },
     active: {

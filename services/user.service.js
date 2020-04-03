@@ -73,7 +73,8 @@ module.exports = {
         });
     },
     getUserById: async (request, cb) => {
-        await User.findById(request.verifiedToken._id, (err, result) => {
+        let projection = 'username fname lname gender phone dob dp';
+        await User.findById(request.verifiedToken._id, projection, (err, result) => {
             if (result.dp) result.dp = result.dp;
             cb(err, result);
         });
