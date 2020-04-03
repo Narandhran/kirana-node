@@ -16,7 +16,7 @@ module.exports = {
         DB_NAME: 'kiranashop',
         DB_PORT: '3669',
         DB_HOST: 'mongodb://localhost',
-        GET_RESOURCE_BASE_PATH: 'http://localhost/kirana-resources/',
+        GET_RESOURCE_BASE_PATH: 'http://52.66.226.142/kirana-resources/',
         POST_RESOURCE_BASE_PATH: '/var/www/html/kirana-resources/'
     }
 };
