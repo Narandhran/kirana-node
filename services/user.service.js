@@ -24,7 +24,7 @@ module.exports = {
                 transporter.sendMail({
                     from: '"no-reply@get2basket.com" <narandhran@gmail.com',
                     to: isUser.username,
-                    subject: 'login credential for neosila',
+                    subject: 'login credential for Get2Basket',
                     html: mailOption
                 }, (error, result) => {
                     cb(error, result);
