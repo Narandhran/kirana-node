@@ -1,20 +1,21 @@
 var path = require('path');
 var multer = require('multer');
+const config = require('../../config')[process.env.NODE_ENV];
 
 const fileStorage = multer.diskStorage({
     destination: (req, file, cb) => {
         switch (file.fieldname) {
             case 'dp':
-                cb(null, `${process.env.POST_RESOURCE_BASE_PATH}dp`);
+                cb(null, `${config.POST_RESOURCE_BASE_PATH}dp`);
                 break;
             case 'products':
-                cb(null, `${process.env.POST_RESOURCE_BASE_PATH}product`);
+                cb(null, `${config.POST_RESOURCE_BASE_PATH}product`);
                 break;
             case 'category':
-                cb(null, `${process.env.POST_RESOURCE_BASE_PATH}category`);
+                cb(null, `${config.POST_RESOURCE_BASE_PATH}category`);
                 break;
             default:
-                cb(null, `${process.env.POST_RESOURCE_BASE_PATH}`);
+                cb(null, `${config.POST_RESOURCE_BASE_PATH}`);
                 break;
 
         }

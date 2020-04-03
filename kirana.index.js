@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-const config = require('./config');
+const config = require('./config')[process.env.NODE_ENV];
 const { json, urlencoded } = require('body-parser');
 const { connectivity } = require('./db');
 const { logger } = require('./middleware/log');
@@ -20,7 +20,7 @@ app
         res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD, PATCH');
         next();
     })
-    .listen(config.adminer.port, () => {
+    .listen(config.SERVER_PORT, () => {
         var get_connection = connectivity(config);
         get_connection.on('error', (err) => {
             console.error(err);
@@ -32,7 +32,7 @@ app
                 .forEach(file => {
                     require('./routes/' + file)(app);
                 });
-            console.log(`Server is listening on port ${config.adminer.port}`);
+            console.log(`Server is listening on port ${config.SERVER_PORT}`);
         });
     });
 module.exports = app;

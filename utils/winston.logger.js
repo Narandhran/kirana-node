@@ -1,5 +1,6 @@
 const { createLogger, transports, format } = require('winston');
 const { combine, prettyPrint } = format;
+const config = require('../config')[process.env.NODE_ENV];
 
 module.exports = {
     errorLogger: createLogger({
@@ -8,7 +9,7 @@ module.exports = {
         ),
         transports: [
             new transports.File({
-                filename: `${process.env.POST_RESOURCE_BASE_PATH}logs/error.log`,
+                filename: `${config.POST_RESOURCE_BASE_PATH}logs/error.log`,
                 level: 'error'
             })
         ]
@@ -19,7 +20,7 @@ module.exports = {
         ),
         transports: [
             new transports.File({
-                filename: `${process.env.POST_RESOURCE_BASE_PATH}logs/success.log`
+                filename: `${config.POST_RESOURCE_BASE_PATH}logs/success.log`
             })
         ]
     })

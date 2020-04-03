@@ -1,6 +1,7 @@
 const { model, Schema } = require('mongoose');
 const { paths } = require('../utils/global.constant');
 var uniqueValidator = require('mongoose-unique-validator');
+const config = require('../config')[process.env.NODE_ENV];
 
 var userSchema = new Schema({
     fname: { type: String, required: true, minlength: 3, maxlength: 16 },
@@ -29,7 +30,7 @@ var userSchema = new Schema({
     },
     dp: {
         type: String,
-        get: pic => `${process.env.GET_RESOURCE_BASE_PATH}dp/${pic}`,
+        get: pic => `${config.GET_RESOURCE_BASE_PATH}dp/${pic}`,
         default: undefined
     },
     fcm_token: {

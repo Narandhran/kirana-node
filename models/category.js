@@ -1,4 +1,5 @@
 const { model, Schema } = require('mongoose');
+const config = require('../config')[process.env.NODE_ENV];
 
 var categorySchema = new Schema({
     name: {
@@ -12,7 +13,7 @@ var categorySchema = new Schema({
     },
     picture: {
         type: String,
-        get: pic => `${process.env.GET_RESOURCE_BASE_PATH}category/${pic}`,
+        get: pic => `${config.GET_RESOURCE_BASE_PATH}category/${pic}`,
     }
 });
 

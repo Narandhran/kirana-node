@@ -1,5 +1,6 @@
 const { model, Schema } = require('mongoose');
 const { paths } = require('../utils/global.constant');
+const config = require('../config')[process.env.NODE_ENV];
 
 var productSchema = new Schema({
     category_id: {
@@ -33,7 +34,7 @@ var productSchema = new Schema({
 productSchema.virtual('getPictures').get(function () {
     let persisted = [];
     this.pictures.forEach(function (e) {
-        persisted.push(`${process.env.GET_RESOURCE_BASE_PATH}${e}`);
+        persisted.push(`${config.GET_RESOURCE_BASE_PATH}${e}`);
     });
     return persisted;
 });
