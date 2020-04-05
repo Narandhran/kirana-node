@@ -30,6 +30,17 @@ module.exports = {
                 cb(err, result);
             });
     },
+    listAllByCategory: async (request, cb) => {
+        await Product
+            .find({ 'category_id': request.params.id })
+            .exec((err, result) => {
+                if (!err)
+                    result.forEach(e => {
+                        e.pictures = e.getPictures;
+                    });
+                cb(err, result);
+            });
+    },
     uploadProductById: async (request, cb) => {
     },
     deleteProductById: async (request, cb) => {
