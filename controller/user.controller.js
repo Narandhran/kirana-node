@@ -21,7 +21,7 @@ module.exports = {
     login: (req, res) => {
         login(req, (err, result) => {
             if (err) errorHandler(req, res, err);
-            else successHandler(req, res, 'Loged In, Kindly store the token', result);
+            else successHandler(req, res, 'Successfully logged in!!', result);
         });
     },
     /**

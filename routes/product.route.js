@@ -4,8 +4,8 @@ module.exports = app => {
     /**
      * AdminOnly
      */
-    app.post('/product/create', AdminOnly, productCtrl.createOneOrMany);
-    app.post('/product/add_pictures/:id', AdminOnly, productCtrl.addPictures);
+    app.post('/product/create', AdminOnly, productCtrl.createProduct);
+    app.get('/product/delete/:id', AdminOnly, productCtrl.deleteProductById);
 
 
     /**

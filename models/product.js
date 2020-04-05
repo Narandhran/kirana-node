@@ -2,13 +2,22 @@ const { model, Schema } = require('mongoose');
 const { paths } = require('../utils/global.constant');
 const config = require('../config')[process.env.NODE_ENV];
 
+var qunatitySchema = new Schema({
+    quantity: { type: Number },
+    suffix: { type: String, enum: ['Kg', 'Ml', 'Ltr', 'Grms', 'Piece'] },
+    price: { type: Number },
+    stock: { type: Number },
+    availability: { type: Boolean, default: true }
+});
+
 var productSchema = new Schema({
     category_id: {
         type: Schema.Types.ObjectId,
         ref: 'category'
     },
-    product_id: {
-        type: String
+    productCode: {
+        type: String,
+        required: false
     },
     name: {
         type: String
@@ -22,11 +31,7 @@ var productSchema = new Schema({
     info: {
         type: String
     },
-    quantityPrice: [{
-        quantity: Number,
-        suffix: { type: String, enum: ['Kg', 'Ml', 'Ltr', 'Grms', 'Piece'] },
-        price: Number
-    }],
+    quantityPrice: [qunatitySchema],
     description: {
         type: String
     }
@@ -34,7 +39,7 @@ var productSchema = new Schema({
 productSchema.virtual('getPictures').get(function () {
     let persisted = [];
     this.pictures.forEach(function (e) {
-        persisted.push(`${config.GET_RESOURCE_BASE_PATH}${e}`);
+        persisted.push(`${config.GET_RESOURCE_BASE_PATH}product/${e}`);
     });
     return persisted;
 });

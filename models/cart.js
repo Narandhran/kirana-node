@@ -10,14 +10,14 @@ var cartSchema = new Schema({
         ref: 'product',
         autopopulate: true
     },
-    volume: {
-        type: String
+    quantityPrice: {
+        quantity: Number,
+        suffix: String,
+        price: Number
     },
-    quantity: {
-        type: Number
-    },
-    price: {
-        type: Number
+    volumePrice: {
+        volume: Number,
+        price: Number
     }
 
 }, { timestamps: true, });
