@@ -2,14 +2,6 @@ const { model, Schema } = require('mongoose');
 const { paths } = require('../utils/global.constant');
 const config = require('../config')[process.env.NODE_ENV];
 
-var qunatitySchema = new Schema({
-    quantity: { type: Number },
-    suffix: { type: String, enum: ['Kg', 'Ml', 'Ltr', 'Grms', 'Piece'] },
-    price: { type: Number },
-    stock: { type: Number },
-    availability: { type: Boolean, default: true }
-});
-
 var productSchema = new Schema({
     category_id: {
         type: Schema.Types.ObjectId,
@@ -31,7 +23,13 @@ var productSchema = new Schema({
     info: {
         type: String
     },
-    quantityPrice: [qunatitySchema],
+    quantityPrice: [{
+        quantity: { type: Number },
+        suffix: { type: String, enum: ['Kg', 'Ml', 'Ltr', 'Grms', 'Piece'] },
+        price: { type: Number },
+        stock: { type: Number },
+        availability: { type: Boolean, default: true }
+    }],
     description: {
         type: String
     }

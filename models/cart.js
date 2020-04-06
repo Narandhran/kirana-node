@@ -7,22 +7,9 @@ var cartSchema = new Schema({
     },
     product_id: {
         type: Schema.Types.ObjectId,
-        ref: 'product',
-        autopopulate: true
-    },
-    quantityPrice: {
-        quantity: Number,
-        suffix: String,
-        price: Number
-    },
-    volumePrice: {
-        volume: Number,
-        price: Number
+        ref: 'product'
     }
-
 }, { timestamps: true, });
-
-cartSchema.plugin(require('mongoose-autopopulate'));
 
 var Cart = model('cart', cartSchema);
 

@@ -1,22 +1,28 @@
-const { addToCart, removeFromCart, viewMyCart } = require('../services/cart.service');
+const { addToCart, listCartByUser, removeCartByUser, removeItemFromCart } = require('../services/cart.service');
 const { successHandler, errorHandler } = require('../utils/handler');
 module.exports = {
     addToCart: (req, res) => {
         addToCart(req, (err, result) => {
             if (err) errorHandler(req, res, err);
-            else successHandler(req, res, 'Product added to the cart successfully');
+            else successHandler(req, res, 'Product added to the cart successfully', result);
         });
     },
-    removeFromCart: (req, res) => {
-        removeFromCart(req, (err, result) => {
+    removeCartByUser: (req, res) => {
+        removeCartByUser(req, (err, result) => {
             if (err) errorHandler(req, res, err);
-            else successHandler(req, res, 'Product removed from the cart successfully', result);
+            else successHandler(req, res, 'Cart cleared successfully', result);
         });
     },
-    viewMyCart: (req, res) => {
-        viewMyCart(req, (err, result) => {
+    listCartByUser: (req, res) => {
+        listCartByUser(req, (err, result) => {
             if (err) errorHandler(req, res, err);
             else successHandler(req, res, 'Listed cart successfully', result);
         });
-    }
+    },
+    removeItemFromCart: (req, res) => {
+        removeItemFromCart(req, (err, result) => {
+            if (err) errorHandler(req, res, err);
+            else successHandler(req, res, 'Item removed successfully', result);
+        });
+    },
 };

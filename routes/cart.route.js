@@ -10,6 +10,7 @@ module.exports = app => {
      * All Users
      */
     app.post('/cart/create', AllUsers, cartCtrl.addToCart);
-    app.get('/cart/list', AllUsers, cartCtrl.viewMyCart);
-    app.delete('/cart/remove/:id', AllUsers, cartCtrl.removeFromCart);
+    app.get('/cart/list', AllUsers, cartCtrl.listCartByUser);
+    app.delete('/cart/remove/:id', AllUsers, cartCtrl.removeItemFromCart);
+    app.delete('cart/clear', AllUsers, cartCtrl.removeCartByUser);
 };

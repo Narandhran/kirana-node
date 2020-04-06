@@ -8,18 +8,26 @@ module.exports = {
                 cb(err, result);
             });
     },
-    removeFromCart: async (request, cb) => {
+    removeCartByUser: async (request, cb) => {
         await Cart
-            .deleteOne({ _id: request.params.id })
+            .deleteMany({ 'user_id': request.verifiedToken._id })
             .exec((err, result) => {
                 cb(err, result);
             });
     },
-    viewMyCart: async (request, cb) => {
+    listCartByUser: async (request, cb) => {
         await Cart
-            .find({ 'user_id': request.verifiedToken._id })
+            .find({ 'user_id': request.verifiedToken._id }, 'product_id')
+            .populate({ path: 'product_id', select: 'product_id name pictures' })
             .exec((err, result) => {
                 cb(err, result);
             });
     },
+    removeItemFromCart: async (request, cb) => {
+        await Cart.findByIdAndDelete(request.params.id)
+            .exec((err, result) => {
+                cb(err, result);
+            });
+    }
+
 };
