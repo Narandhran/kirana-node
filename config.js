@@ -3,7 +3,7 @@ const dotenv = require('dotenv').config();
 module.exports = {
     name: 'API',
     version: '1',
-    development: {
+    local: {
         SERVER_PORT: '1403',
         DB_NAME: 'kiranashop',
         DB_PORT: '27017',

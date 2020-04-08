@@ -27,7 +27,6 @@ var productSchema = new Schema({
         quantity: { type: Number },
         suffix: { type: String, enum: ['Kg', 'Ml', 'Ltr', 'Grms', 'Piece'] },
         price: { type: Number },
-        stock: { type: Number },
         availability: { type: Boolean, default: true }
     }],
     description: {

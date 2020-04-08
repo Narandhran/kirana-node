@@ -18,7 +18,7 @@ module.exports = {
     listCartByUser: async (request, cb) => {
         await Cart
             .find({ 'user_id': request.verifiedToken._id }, 'product_id')
-            .populate({ path: 'product_id', select: 'product_id name pictures' })
+            .populate({ path: 'product_id', select: 'product_id name pictures brand description' })
             .exec((err, result) => {
                 cb(err, result);
             });
@@ -28,6 +28,5 @@ module.exports = {
             .exec((err, result) => {
                 cb(err, result);
             });
-    }
-
+    },
 };

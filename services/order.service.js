@@ -1,13 +1,18 @@
 const { Order } = require('../models/order');
 const { Cart } = require('../models/cart');
 const { onlyNumber, autoIdGen } = require('../utils/autogen');
-const { generateTemplate, transporter } = require('../services/custom/mailer.service');
-
+const { generateTemplate, transporter } = require('./custom/mailer.service');
+const { generatePdf } = require('./custom/pdf.service');
+const moment = require('moment');
 module.exports = {
     placeOrder: async (request, cb) => {
         let orderObj = request.body;
         orderObj.orderId = autoIdGen(8, onlyNumber);
         orderObj.user_id = request.verifiedToken._id;
+        await Order.create(orderObj, (err, result) => {
+            cb(err, result);
+        });
+        /*
         try {
             let isOrder = await Order.create(orderObj);
             if (isOrder) {
@@ -36,7 +41,7 @@ module.exports = {
                 }, 'orderNotifAdmin.html');
                 await transporter.sendMail({
                     from: '"no-reply@neerwash.com" <bugs@reelbox.tv',
-                    to: ['suresh@multicitydigital.com','accounts@reelbox.tv'],
+                    to: ['suresh@multicitydigital.com', 'accounts@reelbox.tv'],
                     subject: 'Order Notification',
                     html: adminMailOption
                 });
@@ -45,6 +50,7 @@ module.exports = {
         } catch (error) {
             cb(error);
         };
+        */
     },
     findOrderByUser: async (request, cb) => {
         Order
@@ -52,5 +58,29 @@ module.exports = {
             .exec((err, result) => {
                 cb(err, result);
             });
+    },
+
+    getInvoice: async (request, cb) => {
+        let isOrder = await Order
+            .findById(request.params.id)
+            .populate({ path: 'productDetails.product_id', select: 'name brand productCode' })
+            .populate({ path: 'user_id', select: 'fname lname address' })
+            .lean();
+        if (isOrder) {
+            isOrder.createdAt = moment.utc(isOrder.createdAt).local().format('YYYY-MM-DD HH:mm:ss');
+            generatePdf(
+                {
+                    resPath: 'order'
+                },
+                {
+                    template: 'order/invoice.html',
+                    data: {
+                        products: isOrder
+                    },
+                    outputPath: 'invoice/' + isOrder.orderId
+                },
+                (err, result) => cb(err, result)
+            );
+        }
     }
 };

@@ -1,4 +1,4 @@
-const { findOrderByUser, placeOrder } = require('../services/order.service');
+const { findOrderByUser, placeOrder,getInvoice } = require('../services/order.service');
 const { successHandler, errorHandler } = require('../utils/handler');
 module.exports = {
     placeOrder: (req, res) => {
@@ -11,6 +11,12 @@ module.exports = {
         findOrderByUser(req, (err, result) => {
             if (err) errorHandler(req, res, err);
             else successHandler(req, res, 'Order(s) listed successfully', result);
+        });
+    },
+    getInvoice:(req,res)=>{
+        getInvoice(req,(err,result)=>{
+            if (err) errorHandler(req, res, err);
+            else successHandler(req, res, 'Invoice generated sccessfully', result);
         });
     }
 };

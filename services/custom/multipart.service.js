@@ -17,7 +17,6 @@ const fileStorage = multer.diskStorage({
             default:
                 cb(null, `${config.POST_RESOURCE_BASE_PATH}`);
                 break;
-
         }
     },
     filename: (req, file, cb) => {

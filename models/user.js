@@ -50,6 +50,11 @@ var userSchema = new Schema({
         type: String,
         default: 'USER'
     },
+    address: {
+        type: String,
+        minlength: 5,
+        maxlength: 100
+    }
 }, { timestamps: true });
 userSchema.virtual('fullname').get(function () {
     return `${this.fname} ${this.lname}`;
