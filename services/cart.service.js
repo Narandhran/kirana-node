@@ -29,4 +29,10 @@ module.exports = {
                 cb(err, result);
             });
     },
+    updateCart: async (request, cb) => {
+        await Cart.findByIdAndUpdate(request.params.id, request.body, { new: true })
+            .exec((err, result) => {
+                cb(err, result);
+            });
+    }
 };
