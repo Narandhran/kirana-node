@@ -1,6 +1,6 @@
 const { Category } = require('../models/category');
 const { Product } = require('../models/product');
-const { loadMulter } = require('../services/custom/multipart.service');
+const { loadMulter } = require('./custom/multipart.service');
 
 module.exports = {
     createCategory: async (request, cb) => {

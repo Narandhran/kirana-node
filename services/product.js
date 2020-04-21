@@ -1,5 +1,5 @@
 const { Product } = require('../models/product');
-const { loadMulter } = require('../services/custom/multipart.service');
+const { loadMulter } = require('./custom/multipart.service');
 const { inspect } = require('util');
 
 module.exports = {

@@ -1,4 +1,4 @@
-const { findOrderByUser, placeOrder,getInvoice } = require('../services/order.service');
+const { findOrderByUser, placeOrder,getInvoice } = require('../services/order');
 const { successHandler, errorHandler } = require('../utils/handler');
 module.exports = {
     placeOrder: (req, res) => {

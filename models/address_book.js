@@ -8,15 +8,20 @@ var addressBookSchema = new Schema({
         ref: 'user',
         required: true
     },
-    billingAddress: {
-        fullname: { type: String, max: 16 },
-        address: { type: String, max: 100 },
-        phone: { type: String, min: 10, max: 10 },
-    },
-    deliveryAddress: {
-        fullname: { type: String, max: 16 },
-        address: { type: String, max: 100 },
-        phone: { type: String, min: 10, max: 10 },
-        gmap: { tye: String }
-    }
-});
+    fullName: { type: String },
+    flat: { type: String },
+    street: { type: String },
+    phone1: { type: String, required: true, maxlength: 10, minlength: 10 },
+    phone2: { type: String, required: false, maxlength: 10, minlength: 10 },
+    city: { type: String },
+    pincode: { type: String, minlength: 6, maxlength: 6 },
+    state: { type: String, default: 'Bangalore' },
+    country: { type: String, default: 'India' },
+    landmark: { type: String, minlength: 5, maxlength: 16 },
+    lat: { type: Number },
+    lan: { type: Number }
+}, { timestamps: true });
+
+var AddressBook = model('address_book', addressBookSchema);
+
+module.exports = { AddressBook };

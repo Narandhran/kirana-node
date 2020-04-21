@@ -31,11 +31,9 @@ var orderSchema = new Schema({
             // autopopulate: true,
             required: true
         },
-        quantityPrice: {
-            quantity: { type: Number },
-            suffix: { type: String },
-            price: { type: Number },
-        },
+        quantity: { type: Number },
+        suffix: { type: String },
+        price: { type: Number },
         howMany: { type: Number, default: 1 }
     }],
     shipmentDetails: {

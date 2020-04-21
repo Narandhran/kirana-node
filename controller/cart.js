@@ -1,4 +1,4 @@
-const { addToCart, listCartByUser, removeCartByUser, removeItemFromCart, updateCart } = require('../services/cart.service');
+const { addToCart, listCartByUser, removeCartByUser, removeItemFromCart, updateCart } = require('../services/cart');
 const { successHandler, errorHandler } = require('../utils/handler');
 module.exports = {
     addToCart: (req, res) => {
@@ -25,10 +25,10 @@ module.exports = {
             else successHandler(req, res, 'Item removed successfully', result);
         });
     },
-    updateCart: (req, res) => [
+    updateCart: (req, res) => {
         updateCart(req, (err, result) => {
             if (err) errorHandler(req, res, err);
             else successHandler(req, res, 'Updated successfully', result);
-        })
-    ]
+        });
+    }
 };

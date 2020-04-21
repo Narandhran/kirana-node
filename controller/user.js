@@ -1,4 +1,4 @@
-const { registration, login, getUserById, updateUserById, updateDisplayPicture } = require('../services/user.service');
+const { registration, login, getUserById, updateUserById, updateDisplayPicture } = require('../services/user');
 const { successHandler, errorHandler } = require('../utils/handler');
 
 /**

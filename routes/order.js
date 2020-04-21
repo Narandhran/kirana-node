@@ -1,4 +1,4 @@
-const orderCtrl = require('../controller/order.controller');
+const orderCtrl = require('../controller/order');
 const { AdminOnly, AllUsers } = require('../utils/auth.util');
 
 module.exports = app => {

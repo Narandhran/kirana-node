@@ -1,4 +1,4 @@
-const { createProduct, listAllProducts, deleteProductById, uploadProductById, listAllByCategory } = require('../services/product.service');
+const { createProduct, listAllProducts, deleteProductById, uploadProductById, listAllByCategory } = require('../services/product');
 const { successHandler, errorHandler } = require('../utils/handler');
 
 module.exports = {

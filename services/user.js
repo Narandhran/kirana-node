@@ -1,8 +1,8 @@
 const { User } = require('../models/user');
 const { generatePassword, encrypt, validate } = require('./custom/crypto.service');
-const { generateTemplate, transporter } = require('../services/custom/mailer.service');
+const { generateTemplate, transporter } = require('./custom/mailer.service');
 const { sign } = require('./custom/jwt.service');
-const { loadMulter } = require('../services/custom/multipart.service');
+const { loadMulter } = require('./custom/multipart.service');
 const collection = 'users';
 
 /**

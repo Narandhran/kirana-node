@@ -1,5 +1,5 @@
 const { AdminOnly, AllUsers } = require('../utils/auth.util');
-const cartCtrl = require('../controller/cart.controller');
+const cartCtrl = require('../controller/cart');
 module.exports = app => {
     /**
      * AdminOnly

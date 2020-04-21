@@ -49,11 +49,6 @@ var userSchema = new Schema({
     role: {
         type: String,
         default: 'USER'
-    },
-    address: {
-        type: String,
-        minlength: 5,
-        maxlength: 100
     }
 }, { timestamps: true });
 userSchema.virtual('fullname').get(function () {

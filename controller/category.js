@@ -1,4 +1,4 @@
-const { createCategory, listAllCategories, updateCategoryById, deleteCategoryById } = require('../services/category.service');
+const { createCategory, listAllCategories, updateCategoryById, deleteCategoryById } = require('../services/category');
 const { successHandler, errorHandler } = require('../utils/handler');
 
 module.exports = {
