@@ -1,13 +1,31 @@
 const { model, Schema } = require('mongoose');
 
 var orderSchema = new Schema({
-    orderId: {
-        type: Number,
+    id: {
+        type: String,
         unique: true
     },
-    modeOfDelivery: {
+    currency: {
         type: String,
-        enum: ['cash', 'card', 'upi'],
+        default: 'INR'
+    },
+    receipt: {
+        type: String
+    },
+    payment_capture: {
+        type: Boolean,
+        default: 1
+    },
+    notes: {
+        type: Array,
+    },
+    attempts: {
+        type: Number,
+        default: 0
+    },
+    modeOfPayment: {
+        type: String,
+        enum: ['cash', 'online'],
         required: true
     },
     user_id: {
@@ -21,7 +39,7 @@ var orderSchema = new Schema({
     tax: {
         type: Number
     },
-    grandTotal: {
+    amount: {
         type: Number
     },
     productDetails: [{
@@ -44,8 +62,8 @@ var orderSchema = new Schema({
     },
     status: {
         type: String,
-        default: 'ordered',
-        enum: ['ordered', 'delivered', 'returned', 'canceled']
+        default: 'created',
+        enum: ['created', 'attempted', 'failed']
     }
 }, { timestamps: true });
 orderSchema.plugin(require('mongoose-unique-validator'));

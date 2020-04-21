@@ -3,14 +3,20 @@ const { Cart } = require('../models/cart');
 const { onlyNumber, autoIdGen } = require('../utils/autogen');
 const { generateTemplate, transporter } = require('./custom/mailer.service');
 const { generatePdf } = require('./custom/pdf.service');
+const { createOrder } = require('./custom/razorpay.service');
 const moment = require('moment');
 module.exports = {
     placeOrder: async (request, cb) => {
         let orderObj = request.body;
-        orderObj.orderId = autoIdGen(8, onlyNumber);
         orderObj.user_id = request.verifiedToken._id;
-        await Order.create(orderObj, (err, result) => {
-            cb(err, result);
+        createOrder(orderObj, (err, result) => {
+            if (err) cb(new Error('Order attempt failed', {}));
+            else {
+                let persisted = { ...orderObj, ...result };
+                Order.create(persisted, (err, result) => {
+                    cb(err, result);
+                });
+            }
         });
         /*
         try {

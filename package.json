@@ -20,6 +20,7 @@
     "nodemailer": "^6.4.4",
     "nodemailer-juice": "^1.0.1",
     "pdf-creator-node": "^1.4.1",
+    "razorpay": "^2.0.6",
     "request": "^2.88.2",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^4.4.2"
