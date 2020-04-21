@@ -6,7 +6,7 @@ module.exports = app => {
      * All Users
      */
     app.post('/order/place_order', AllUsers, orderCtrl.placeOrder);
-    app.get('/order/get_my_orders',AllUsers,orderCtrl.findOrderByUser);
-
-    app.get('/order/invoice/:id',orderCtrl.getInvoice);
+    app.get('/order/get_my_orders', AllUsers, orderCtrl.findOrderByUser);
+    app.post('/order/verify_payment', AllUsers, orderCtrl.paymentVerification);
+    app.get('/order/invoice/:id', orderCtrl.getInvoice);
 };

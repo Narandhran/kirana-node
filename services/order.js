@@ -1,13 +1,14 @@
 const { Order } = require('../models/order');
 const { Cart } = require('../models/cart');
-const { onlyNumber, autoIdGen } = require('../utils/autogen');
+const { alphaNumeric, autoIdGen } = require('../utils/autogen');
 const { generateTemplate, transporter } = require('./custom/mailer.service');
 const { generatePdf } = require('./custom/pdf.service');
-const { createOrder } = require('./custom/razorpay.service');
+const { createOrder, verify } = require('./custom/razorpay.service');
 const moment = require('moment');
 module.exports = {
     placeOrder: async (request, cb) => {
         let orderObj = request.body;
+        orderObj.receipt = autoIdGen(8, alphaNumeric);
         orderObj.user_id = request.verifiedToken._id;
         createOrder(orderObj, (err, result) => {
             if (err) cb(new Error('Order attempt failed', {}));
@@ -58,6 +59,21 @@ module.exports = {
         };
         */
     },
+    paymentVerification: async (request, cb) => {
+        let { razorpay_order_id, razorpay_payment_id, razorpay_signature } = request.body;
+        let isVerified = verify(razorpay_order_id, razorpay_payment_id, razorpay_signature);
+        if (isVerified) {
+            await Order.updateOne({
+                'id': orderId
+            }, {
+                'isPaymentSuccess': true,
+                'trackingStatus': 'ordered'
+            }, (err, result) => {
+                cb(err, result);
+            });
+        }
+        else cb(new Error('Payment verification failed', {}));
+    },
     findOrderByUser: async (request, cb) => {
         Order
             .find({ user_id: request.verifiedToken._id })
@@ -65,7 +81,6 @@ module.exports = {
                 cb(err, result);
             });
     },
-
     getInvoice: async (request, cb) => {
         let isOrder = await Order
             .findById(request.params.id)

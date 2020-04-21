@@ -64,6 +64,12 @@ var orderSchema = new Schema({
         type: String,
         default: 'created',
         enum: ['created', 'attempted', 'failed']
+    },
+    isPaymentSuccess: { type: Boolean, default: false },
+    trackingStatus: {
+        type: String,
+        default: 'attempted',
+        enum: ['attempted', 'ordered', 'delivered', 'cancelled', 'returned']
     }
 }, { timestamps: true });
 orderSchema.plugin(require('mongoose-unique-validator'));
