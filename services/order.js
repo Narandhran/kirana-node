@@ -64,7 +64,7 @@ module.exports = {
         let isVerified = verify(razorpay_order_id, razorpay_payment_id, razorpay_signature);
         if (isVerified) {
             await Order.updateOne({
-                'id': orderId
+                'id': razorpay_order_id
             }, {
                 'isPaymentSuccess': true,
                 'trackingStatus': 'ordered'
@@ -77,6 +77,7 @@ module.exports = {
     findOrderByUser: async (request, cb) => {
         Order
             .find({ user_id: request.verifiedToken._id })
+            .sort({ 'createdAt': -1 })
             .exec((err, result) => {
                 cb(err, result);
             });

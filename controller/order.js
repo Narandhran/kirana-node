@@ -10,7 +10,7 @@ module.exports = {
     paymentVerification: (req, res) => {
         paymentVerification(req, (err, result) => {
             if (err) errorHandler(req, res, err);
-            else successHandler(req, res, 'Payment verified successfully');
+            else successHandler(req, res, 'Payment verified successfully', result);
         });
     },
     findOrderByUser: (req, res) => {
