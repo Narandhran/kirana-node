@@ -39,6 +39,6 @@
     "start": "node kirana.index.js",
     "dev": "nodemon kirana.index.js"
   },
-  "author": "gautam",
+  "author": "Naren",
   "license": "ISC"
 }

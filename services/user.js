@@ -1,4 +1,5 @@
 const { User } = require('../models/user');
+const { AddressBook } = require('../models/address_book');
 const { encrypt, validate } = require('./custom/crypto.service');
 const { generateTemplate, transporter } = require('./custom/mailer.service');
 const { sign } = require('./custom/jwt.service');
@@ -75,9 +76,10 @@ module.exports = {
     },
     getUserById: async (request, cb) => {
         let projection = 'username fname lname gender phone dob dp';
+        let addressBook = await AddressBook.find({ 'user_id': request.verifiedToken._id }).lean();
         await User.findById(request.verifiedToken._id, projection, (err, result) => {
-            if (result.dp) result.dp = result.dp;
-            cb(err, result);
+            if (result.dp != null) result.dp = result.dp;
+            cb(err, { result, addressBook });
         });
     },
     updateUserById: async (request, cb) => {
