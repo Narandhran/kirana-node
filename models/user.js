@@ -33,9 +33,14 @@ var userSchema = new Schema({
         get: pic => `${config.GET_RESOURCE_BASE_PATH}dp/${pic}`,
         default: undefined
     },
-    fcm_token: {
+    fcm: {
         type: String,
         minlength: 36
+    },
+    verify: {
+        // loginFlag: { type: Boolean, default: false },
+        otp: { type: Number, require: true },
+        expireTime: { type: Date }
     },
     mobile_uuid: {
         type: String,

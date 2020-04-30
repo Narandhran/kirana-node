@@ -1,4 +1,5 @@
-const { registration, login, getUserById, updateUserById, updateDisplayPicture } = require('../services/user');
+const { registration, login, getUserById, updateUserById,
+    requestOtp, resetPassword, updateDisplayPicture } = require('../services/user');
 const { successHandler, errorHandler } = require('../utils/handler');
 
 /**
@@ -50,5 +51,23 @@ module.exports = {
             if (err) errorHandler(req, res, err);
             else successHandler(req, res, 'User data updated successfully', result);
         });
-    }
+    },
+    /**
+     * Request Otp
+     */
+    requestOtp: (req, res) => {
+        requestOtp(req, (err, result) => {
+            if (err) errorHandler(req, res, err);
+            else successHandler(req, res, 'OTP sent successfully', result);
+        });
+    },
+    /**
+     * Resetting password
+     */
+    resetPassword: (req, res) => {
+        resetPassword(req, (err, result) => {
+            if (err) errorHandler(req, res, err);
+            else successHandler(req, res, 'Password updated successfully', {});
+        });
+    },
 };

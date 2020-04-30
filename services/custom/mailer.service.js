@@ -14,8 +14,8 @@ var transporter = createTransport({
     host: 'smtp.gmail.com',
     port: 587,
     auth: {
-        user: 'narandhran',
-        pass: ''
+        user: 'Signvisionsolutionpvt@gmail.com',
+        pass: 'Welcome2signvision'
     }
 });
 
