@@ -11,7 +11,7 @@ module.exports = {
         var query = {
             'location': {
                 '$geoWithin': {
-                    '$centerSphere': [sourceCoordinates, kmToRadian(15)]
+                    '$centerSphere': [sourceCoordinates, kmToRadian(5)]
                 }
             }
         };
