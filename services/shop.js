@@ -50,4 +50,11 @@ module.exports = {
                 cb(err, result);
             });
     },
+    viewShopsByStatus: async (request, cb) => {
+        let { status } = request.params;
+        await Shop.find({ 'status': status },'name location owner')
+            .exec((err, result) => {
+                cb(err, result);
+            });
+    },
 };

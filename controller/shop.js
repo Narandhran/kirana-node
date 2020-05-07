@@ -1,4 +1,5 @@
-const { findShopNearBy, requestToAddShop, respondToAddShop, updateDetails } = require('../services/shop');
+const { findShopNearBy, requestToAddShop, viewShopsByStatus, viewMyShops,
+    respondToAddShop, updateDetails } = require('../services/shop');
 const { successHandler, errorHandler } = require('../utils/handler');
 module.exports = {
     /**
@@ -22,7 +23,7 @@ module.exports = {
     /**
      * Admin can either approve or block the shop
      */
-    respondToAddShop:(req, res) => {
+    respondToAddShop: (req, res) => {
         respondToAddShop(req, (err, result) => {
             if (err) errorHandler(req, res, err);
             else successHandler(req, res, 'Success', result);
@@ -31,10 +32,28 @@ module.exports = {
     /**
      * Vendor can update the details of the shop
      */
-    updateDetails:(req, res) => {
+    updateDetails: (req, res) => {
         updateDetails(req, (err, result) => {
             if (err) errorHandler(req, res, err);
             else successHandler(req, res, 'Shop updated successfully', result);
+        });
+    },
+    /**
+     * Vendor can view his/her own shops
+     */
+    viewMyShops: (req, res) => {
+        viewMyShops(req, (err, result) => {
+            if (err) errorHandler(req, res, err);
+            else successHandler(req, res, 'Shop(s) listed successfully', result);
+        });
+    },
+    /**
+     * Admin can list shop by status
+     */
+    viewShopsByStatus: (req, res) => {
+        viewShopsByStatus(req, (err, result) => {
+            if (err) errorHandler(req, res, err);
+            else successHandler(req, res, 'Shop(s) listed successfully', result);
         });
     },
 };

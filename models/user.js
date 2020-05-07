@@ -34,7 +34,7 @@ var userSchema = new Schema({
         default: undefined
     },
     fcm: {
-        type: String,
+        type: [String],
         minlength: 36
     },
     verify: {
