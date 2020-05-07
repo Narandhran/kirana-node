@@ -3,6 +3,10 @@ const { paths } = require('../utils/global.constant');
 const config = require('../config')[process.env.NODE_ENV];
 
 var productSchema = new Schema({
+    shop_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'shop'
+    },
     category_id: {
         type: Schema.Types.ObjectId,
         ref: 'category'
