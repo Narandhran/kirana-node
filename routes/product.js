@@ -11,6 +11,6 @@ module.exports = app => {
     /**
      * All Users
      */
-    app.get('/product/list', productCtrl.listAllProducts);
-    app.get('/product/list/:id',productCtrl.listAllByCategory);
+    app.get('/product/list_by_shop/:id', productCtrl.listAllProducts);
+    app.get('/product/list_by_category',productCtrl.listAllByCategory);
 };

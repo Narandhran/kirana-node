@@ -21,7 +21,7 @@ module.exports = {
     },
     listAllProducts: async (request, cb) => {
         await Product
-            .find({})
+            .find({ 'shop_id': request.params.id })
             .exec((err, result) => {
                 if (!err)
                     result.forEach(e => {
@@ -32,7 +32,7 @@ module.exports = {
     },
     listAllByCategory: async (request, cb) => {
         await Product
-            .find({ 'category_id': request.params.id })
+            .find(request.body)
             .exec((err, result) => {
                 if (!err)
                     result.forEach(e => {

@@ -7,8 +7,17 @@ module.exports = {
     requestToAddShop: async (request, cb) => {
         let shopObj = request.body;
         shopObj.vendor_id = request.verifiedToken._id;
-        await Shop.create(shopObj, (err, result) => {
-            cb(err, result);
+        let upload = loadMulter.single('shop');
+        await upload(request, null, (err) => {
+            if (err)
+                cb(err);
+            else {
+                let persisted = JSON.parse(shopObj.textField);
+                persisted.picture = request.file.filename;
+                Shop.create(persisted, (err, result) => {
+                    cb(err, result);
+                });
+            }
         });
     },
     updateDetails: async (request, cb) => {

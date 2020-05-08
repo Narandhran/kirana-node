@@ -14,6 +14,9 @@ const fileStorage = multer.diskStorage({
             case 'category':
                 cb(null, `${config.POST_RESOURCE_BASE_PATH}category`);
                 break;
+            case 'shop':
+                cb(null, `${config.POST_RESOURCE_BASE_PATH}shop`);
+                break;
             default:
                 cb(null, `${config.POST_RESOURCE_BASE_PATH}`);
                 break;

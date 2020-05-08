@@ -108,7 +108,7 @@ then
     echo "directory(s) already exist";
 else
     `sudo mkdir -p  -m 777 /var/www/html/get2basket-resources /var/www/html/get2basket-resources/dp /var/www/html/get2basket-resources/logs`
-    `sudo mkdir -p 777 /var/www/html/get2basket-resources/product /var/www/html/get2basket-resources/category`
+    `sudo mkdir -p 777 /var/www/html/get2basket-resources/product /var/www/html/get2basket-resources/category /var/www/html/get2basket-resources/shop`
 	echo "directory(s) created successfully";
 fi
 error_handler_function

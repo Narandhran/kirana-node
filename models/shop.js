@@ -10,6 +10,9 @@ var shopSchema = new Schema({
     name: {
         type: String
     },
+    photo: {
+        type: String
+    },
     location: {
         type: {
             type: String,
@@ -35,7 +38,7 @@ var shopSchema = new Schema({
     status: {
         type: String,
         enum: ['Pending', 'Available', 'Closed', 'Unavailable', 'Block'],
-        default: 'pending'
+        default: 'Pending'
     }
 }, { timestamps: true });
 
