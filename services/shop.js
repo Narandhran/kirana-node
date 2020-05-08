@@ -7,13 +7,13 @@ module.exports = {
      * Only vendor
      */
     requestToAddShop: async (request, cb) => {
-        let shopObj = request.body;
         let upload = loadMulter.single('shop');
         await upload(request, null, (err) => {
             if (err)
                 cb(err);
             else {
-                let persisted = JSON.parse(shopObj.textField);
+                let persisted = JSON.parse(request.body.textField);
+                console.log('persisted: ' + persisted);
                 persisted.vendor_id = request.verifiedToken._id;
                 persisted.picture = request.file.filename;
                 Shop.create(persisted, (err, result) => {

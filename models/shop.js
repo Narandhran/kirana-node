@@ -10,7 +10,7 @@ var shopSchema = new Schema({
     name: {
         type: String
     },
-    photo: {
+    picture: {
         type: String
     },
     location: {
