@@ -8,13 +8,13 @@ module.exports = {
      */
     requestToAddShop: async (request, cb) => {
         let shopObj = request.body;
-        shopObj.vendor_id = request.verifiedToken._id;
         let upload = loadMulter.single('shop');
         await upload(request, null, (err) => {
             if (err)
                 cb(err);
             else {
                 let persisted = JSON.parse(shopObj.textField);
+                persisted.vendor_id = request.verifiedToken._id;
                 persisted.picture = request.file.filename;
                 Shop.create(persisted, (err, result) => {
                     cb(err, result);
@@ -63,7 +63,7 @@ module.exports = {
     },
     viewShopsByStatus: async (request, cb) => {
         let { status } = request.params;
-        await Shop.find({ 'status': status },'name location owner')
+        await Shop.find({ 'status': status }, 'name location owner')
             .exec((err, result) => {
                 cb(err, result);
             });
