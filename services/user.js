@@ -6,6 +6,7 @@ const { sign } = require('./custom/jwt.service');
 const { loadMulter } = require('./custom/multipart.service');
 const { onlyNumber, autoIdGen, alphaNumeric } = require('../utils/autogen');
 const { addTime } = require('../utils/date.util');
+const config = require('../config')[process.env.NODE_ENV];
 const collection = 'users';
 
 /**
@@ -53,7 +54,7 @@ module.exports = {
                         role: isUser.role,
                         fullname: isUser.fullname
                     });
-                    cb(null, token);
+                    cb(null, { token: token, role: isUser.role, rPath: config.GET_RESOURCE_BASE_PATH });
                 } catch (e) { cb(e); };
             } else { cb(new Error('Incorrect Password')); }
         } else { cb(new Error('Incorrect Username')); }

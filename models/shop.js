@@ -37,7 +37,7 @@ var shopSchema = new Schema({
     },
     status: {
         type: String,
-        enum: ['Pending', 'Available', 'Closed', 'Unavailable', 'Block'],
+        enum: ['Pending', 'Approve', 'Unavailable', 'Block'],
         default: 'Pending'
     }
 }, { timestamps: true });

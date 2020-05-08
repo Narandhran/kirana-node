@@ -29,7 +29,9 @@ module.exports = {
             });
     },
     viewMyShops: async (request, cb) => {
-        await Shop.find({ 'vendor_id': request.verifiedToken._id }, 'name location owner status')
+        await Shop
+            .find({ 'vendor_id': request.verifiedToken._id }, 'name location owner status picture createdAt')
+            .sort({ 'createdAt': -1 })
             .exec((err, result) => {
                 cb(err, result);
             });
@@ -62,8 +64,11 @@ module.exports = {
             });
     },
     viewShopsByStatus: async (request, cb) => {
-        let { status } = request.params;
-        await Shop.find({ 'status': status }, 'name location owner')
+        let { status = 'ALL' } = request.params;
+        let query = status == 'ALL' ? {} : { 'status': status };
+        await Shop
+            .find(query, 'name location owner status picture createdAt')
+            .sort({ 'createdAt': -1 })
             .exec((err, result) => {
                 cb(err, result);
             });
