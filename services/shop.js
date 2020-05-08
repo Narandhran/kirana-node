@@ -1,5 +1,7 @@
 const { Shop } = require('../models/shop');
 const { kmToRadian } = require('./custom/geo.service');
+const { loadMulter } = require('./custom/multipart.service');
+
 module.exports = {
     /**
      * Only vendor
