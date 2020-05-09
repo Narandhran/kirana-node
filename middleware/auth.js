@@ -22,7 +22,8 @@ module.exports = {
                 let token = req.verifiedToken;
                 if (!roles.some(r => token.role.indexOf(r) >= 0))
                     errorHandler(req, res, new Error('Unauthorized, Access denied.'));
-                next();
+                else
+                    next();
             }
         ];
     }

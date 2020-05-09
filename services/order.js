@@ -104,5 +104,13 @@ module.exports = {
                 (err, result) => cb(err, result)
             );
         }
+    },
+    viewOrdersByVendor: async (request, cb) => {
+        Order
+            .find({ 'shop_id': request.params.id })
+            .sort({ 'createdAt': -1 })
+            .exec((err, result) => {
+                cb(err, result);
+            });
     }
 };

@@ -13,7 +13,6 @@ module.exports = {
                 cb(err);
             else {
                 let persisted = JSON.parse(request.body.textField);
-                console.log('persisted: ' + persisted);
                 persisted.vendor_id = request.verifiedToken._id;
                 persisted.picture = request.file.filename;
                 Shop.create(persisted, (err, result) => {

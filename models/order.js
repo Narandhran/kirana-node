@@ -5,6 +5,10 @@ var orderSchema = new Schema({
         type: String,
         unique: true
     },
+    shop_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'shop'
+    },
     currency: {
         type: String,
         default: 'INR'
@@ -62,13 +66,13 @@ var orderSchema = new Schema({
     },
     status: {
         type: String,
-        default: 'created',
+        default: 'attempted',
         enum: ['created', 'attempted', 'failed']
     },
     isPaymentSuccess: { type: Boolean, default: false },
     trackingStatus: {
         type: String,
-        enum: ['processing', 'delivered', 'cancelled', 'returned']
+        enum: ['Processing', 'Delivered', 'Cancelled', 'Returned']
     }
 }, { timestamps: true });
 orderSchema.plugin(require('mongoose-unique-validator'));
