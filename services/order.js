@@ -1,5 +1,5 @@
 const { Order } = require('../models/order');
-const { Cart } = require('../models/cart');
+const { Shop } = require('../models/shop');
 const { alphaNumeric, autoIdGen } = require('../utils/autogen');
 const { generateTemplate, transporter } = require('./custom/mailer.service');
 const { generatePdf } = require('./custom/pdf.service');
@@ -105,9 +105,13 @@ module.exports = {
             );
         }
     },
-    viewOrdersByVendor: async (request, cb) => {
-        Order
-            .find({ 'shop_id': request.params.id })
+    findOrdersByVendor: async (request, cb) => {
+        let { status = 'ALL' } = request.params;
+        let query = {};
+        query = status == 'ALL' ? {} : { 'trackingStatus': status };
+        let shops = await Shop.find({ 'vendor_id': request.verifiedToken._id });
+        await Order
+            .find({ 'shop_id': { $in: shops }, query })
             .sort({ 'createdAt': -1 })
             .exec((err, result) => {
                 cb(err, result);

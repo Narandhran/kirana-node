@@ -1,5 +1,5 @@
 const { findOrderByUser, placeOrder, getInvoice, paymentVerification,
-    viewOrdersByUser, viewOrdersByVendor } = require('../services/order');
+    findOrdersByVendor, viewOrdersByVendor } = require('../services/order');
 const { successHandler, errorHandler } = require('../utils/handler');
 module.exports = {
     placeOrder: (req, res) => {
@@ -27,8 +27,8 @@ module.exports = {
             else successHandler(req, res, 'Invoice generated successfully', result);
         });
     },
-    viewOrdersByVendor:(req, res) => {
-        viewOrdersByVendor(req, (err, result) => {
+    findOrdersByVendor:(req, res) => {
+        findOrdersByVendor(req, (err, result) => {
             if (err) errorHandler(req, res, err);
             else successHandler(req, res, 'Order(s) listed successfully', result);
         });

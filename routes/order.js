@@ -13,5 +13,5 @@ module.exports = app => {
     /**
      * Vendor
      */
-    app.get('/order/view/:id', VendorOnly,orderCtrl.viewOrdersByVendor);
+    app.get('/order/view/:status', VendorOnly,orderCtrl.viewOrdersByVendor);
 };
