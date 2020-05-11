@@ -1,6 +1,7 @@
 const { Shop } = require('../models/shop');
 const { kmToRadian } = require('./custom/geo.service');
 const { loadMulter } = require('./custom/multipart.service');
+const { inspect } = require('util');
 
 module.exports = {
     /**
@@ -10,7 +11,7 @@ module.exports = {
         let upload = loadMulter.single('shop');
         await upload(request, null, (err) => {
             if (err)
-                cb(err);
+                cb(err, {});
             else {
                 let persisted = JSON.parse(request.body.textField);
                 persisted.vendor_id = request.verifiedToken._id;
@@ -22,10 +23,24 @@ module.exports = {
         });
     },
     updateDetails: async (request, cb) => {
-        await Shop.findByIdAndUpdate(request.params.id, request.body, { new: true })
-            .exec((err, result) => {
-                cb(err, result);
-            });
+        let upload = loadMulter.single('shop');
+        await upload(request, null, (err) => {
+            if (err) {
+                console.log(err);
+                cb(err, {});
+            }
+            else {
+                let persisted = {};
+                persisted = JSON.parse(request.body.textField);
+                if (request.file)
+                    persisted.picture = request.file.filename;
+                // console.log('persisted: ' + persisted);
+                Shop.findByIdAndUpdate(request.params.id, persisted, { new: true })
+                    .exec((err, result) => {
+                        cb(err, result);
+                    });
+            }
+        });
     },
     viewMyShops: async (request, cb) => {
         await Shop

@@ -18,12 +18,13 @@ const fileStorage = multer.diskStorage({
                 cb(null, `${config.POST_RESOURCE_BASE_PATH}shop`);
                 break;
             default:
-                cb(null, `${config.POST_RESOURCE_BASE_PATH}`);
+                // cb(null, `${config.POST_RESOURCE_BASE_PATH}`);
                 break;
         }
     },
     filename: (req, file, cb) => {
-        cb(null, `${Date.now()}${path.extname(file.originalname)}`);
+        if (file)
+            cb(null, `${Date.now()}${path.extname(file.originalname)}`);
     }
 });
 
@@ -35,7 +36,7 @@ var loadMulter = multer({
             e.name = 'FileValidationError';
             return cb(e, false);
         }
-        cb(null, true);
+        else cb(null, true);
     },
     limits: { fileSize: (5 * 1024 * 1024) }
 });

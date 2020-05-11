@@ -41,7 +41,7 @@ module.exports = {
                 cb(err, result);
             });
     },
-    uploadProductById: async (request, cb) => {
+    updateProductById: async (request, cb) => {
     },
     deleteProductById: async (request, cb) => {
         await Product

@@ -111,7 +111,7 @@ module.exports = {
         query = status == 'ALL' ? {} : { 'trackingStatus': status };
         let shops = await Shop.find({ 'vendor_id': request.verifiedToken._id });
         await Order
-            .find({ 'shop_id': { $in: shops }, query })
+            .find({ 'shop_id': { $in: shops }, ...query })
             .sort({ 'createdAt': -1 })
             .exec((err, result) => {
                 cb(err, result);
