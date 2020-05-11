@@ -1,4 +1,4 @@
-const { createProduct, listAllProducts, deleteProductById, uploadProductById, listAllByCategory } = require('../services/product');
+const { createProduct, listAllProducts, deleteProductById, updateProductById, listAllByCategory } = require('../services/product');
 const { successHandler, errorHandler } = require('../utils/handler');
 
 module.exports = {
@@ -36,6 +36,16 @@ module.exports = {
         listAllByCategory(req, (err, result) => {
             if (err) errorHandler(req, res, err);
             else successHandler(req, res, 'Product(s) listed successfully', result);
+        });
+    },
+    /**
+     * Vendor
+     * Update Product using ID
+     */
+    updateProductById: (req, res) => {
+        updateProductById(req, (err, result) => {
+            if (err) errorHandler(req, res, err);
+            else successHandler(req, res, 'Product updated successfully', result);
         });
     }
 };

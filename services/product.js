@@ -7,7 +7,7 @@ module.exports = {
         let upload = loadMulter.array('products', 3);
         await upload(request, null, (err) => {
             if (err)
-                cb(err);
+                cb(err, {});
             else {
                 let persisted = JSON.parse(request.body.textField);
                 persisted.pictures = request.files.map(e => {
@@ -16,6 +16,26 @@ module.exports = {
                 Product.create(persisted, (err, result) => {
                     cb(err, result);
                 });
+            }
+        });
+    },
+    updateProductById: async (request, cb) => {
+        let upload = loadMulter.array('products', 3);
+        await upload(request, null, (err) => {
+            if (err) {
+                cb(err, {});
+            }
+            else {
+                let persisted = {};
+                persisted = JSON.parse(request.body.textField);
+                if (request.files)
+                    persisted.pictures = request.files.map(e => {
+                        return e.filename;
+                    });
+                Product.findByIdAndUpdate(request.params.id, persisted, { new: true })
+                    .exec((err, result) => {
+                        cb(err, result);
+                    });
             }
         });
     },
@@ -40,8 +60,6 @@ module.exports = {
                     });
                 cb(err, result);
             });
-    },
-    updateProductById: async (request, cb) => {
     },
     deleteProductById: async (request, cb) => {
         await Product

@@ -1,4 +1,4 @@
-const { AdminOnly, AllUsers } = require('../utils/auth.util');
+const { AdminOnly, AllUsers, VendorOnly } = require('../utils/auth.util');
 const productCtrl = require('../controller/product');
 module.exports = app => {
     /**
@@ -12,5 +12,10 @@ module.exports = app => {
      * All Users
      */
     app.get('/product/list_by_shop/:id', productCtrl.listAllProducts);
-    app.get('/product/list_by_category',productCtrl.listAllByCategory);
+    app.get('/product/list_by_category', productCtrl.listAllByCategory);
+
+    /**
+     * Vendor
+     */
+    app.put('/product/update/:id', VendorOnly, productCtrl.updateProductById);
 };

@@ -26,7 +26,6 @@ module.exports = {
         let upload = loadMulter.single('shop');
         await upload(request, null, (err) => {
             if (err) {
-                console.log(err);
                 cb(err, {});
             }
             else {
