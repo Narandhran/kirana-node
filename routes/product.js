@@ -1,10 +1,10 @@
-const { AdminOnly, AllUsers, VendorOnly } = require('../utils/auth.util');
+const { AdminOnly, AllUsers, VendorOnly, VendorAndAdmin } = require('../utils/auth.util');
 const productCtrl = require('../controller/product');
 module.exports = app => {
     /**
      * AdminOnly
      */
-    app.post('/product/create', AdminOnly, productCtrl.createProduct);
+    app.post('/product/create', VendorOnly, productCtrl.createProduct);
     app.get('/product/delete/:id', AdminOnly, productCtrl.deleteProductById);
 
 

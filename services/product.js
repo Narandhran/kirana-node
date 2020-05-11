@@ -52,7 +52,10 @@ module.exports = {
     },
     listAllByCategory: async (request, cb) => {
         await Product
-            .find(request.body)
+            .find({
+                'shop_id': request.query.sid,
+                'category_id': request.query.cid
+            })
             .exec((err, result) => {
                 if (!err)
                     result.forEach(e => {
