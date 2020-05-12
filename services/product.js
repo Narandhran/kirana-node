@@ -56,6 +56,7 @@ module.exports = {
                 'shop_id': request.query.sid,
                 'category_id': request.query.cid
             })
+            .populate({ path: 'category_id', select: 'name' })
             .exec((err, result) => {
                 if (!err)
                     result.forEach(e => {

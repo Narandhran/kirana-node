@@ -5,6 +5,10 @@ var cartSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'user'
     },
+    shop_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'shop'
+    },
     product_id: {
         type: Schema.Types.ObjectId,
         ref: 'product'
