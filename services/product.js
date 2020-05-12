@@ -42,6 +42,7 @@ module.exports = {
     listAllProducts: async (request, cb) => {
         await Product
             .find({ 'shop_id': request.params.id })
+            .populate({ path: 'category_id', select: 'name' })
             .exec((err, result) => {
                 if (!err)
                     result.forEach(e => {
