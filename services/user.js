@@ -21,7 +21,11 @@ module.exports = {
         let plainPassword = autoIdGen(6, alphaNumeric);
         userObj.password = encrypt(plainPassword);
         try {
-            userObj.role = isAdmin.length > 0 ? 'USER' : 'ADMIN';
+            if (request.query.isVendor)
+                userObj.role = 'VENDOR';
+            else if (isAdmin.length > 0)
+                userObj.role = 'USER';
+            else userObj.role = 'ADMIN';
             let isUser = await User.create(userObj);
             if (isUser) {
                 let mailOption = await generateTemplate({ fullname: isUser.fullname, username: isUser.username, password: plainPassword }, 'registration/userRegistration.html');

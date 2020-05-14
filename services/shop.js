@@ -86,4 +86,10 @@ module.exports = {
                 cb(err, result);
             });
     },
+    deleteShopById: async (request, cb) => {
+        await Shop.deleteOne({ _id: request.params.id, status: 'Pending' })
+            .exec((err, result) => {
+                cb(err, result);
+            });
+    }
 };

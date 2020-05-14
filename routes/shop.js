@@ -8,6 +8,7 @@ module.exports = app => {
     app.post('/shop/request_to_create', VendorOnly, shopCtrl.requestToAddShop);
     app.put('/shop/update_details/:id', VendorOnly, shopCtrl.updateDetails);
     app.get('/shop/list_my_shops', VendorOnly, shopCtrl.viewMyShops);
+    app.delete('/shop/delete/:id', VendorOnly, shopCtrl.deteleShopById);
 
     /** All Users */
     app.post('/shop/nearby', AllUsers, shopCtrl.findShopNearBy);

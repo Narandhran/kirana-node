@@ -1,5 +1,5 @@
 const { findShopNearBy, requestToAddShop, viewShopsByStatus, viewMyShops,
-    respondToAddShop, updateDetails } = require('../services/shop');
+    respondToAddShop, updateDetails, deleteShopById } = require('../services/shop');
 const { successHandler, errorHandler } = require('../utils/handler');
 module.exports = {
     /**
@@ -56,4 +56,10 @@ module.exports = {
             else successHandler(req, res, 'Shop(s) listed successfully', result);
         });
     },
+    deleteShopById: (req, res) => {
+        deleteShopById(req, (err, result) => {
+            if (err) errorHandler(req, res, err);
+            else successHandler(req, res, 'Shop removed successfully', result);
+        });
+    }
 };
