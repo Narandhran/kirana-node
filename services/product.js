@@ -32,7 +32,9 @@ module.exports = {
                     persisted.pictures = request.files.map(e => {
                         return e.filename;
                     });
-                Product.findByIdAndUpdate(request.params.id, persisted, { new: true })
+                Product
+                    .findByIdAndUpdate(request.params.id, persisted, { new: true })
+                    .populate({ path: 'category_id', select: 'name' })
                     .exec((err, result) => {
                         cb(err, result);
                     });

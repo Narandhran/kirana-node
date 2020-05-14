@@ -5,8 +5,6 @@ module.exports = app => {
      * AdminOnly
      */
     app.post('/product/create', VendorOnly, productCtrl.createProduct);
-    app.get('/product/delete/:id', AdminOnly, productCtrl.deleteProductById);
-
 
     /**
      * All Users
@@ -18,4 +16,5 @@ module.exports = app => {
      * Vendor
      */
     app.put('/product/update/:id', VendorOnly, productCtrl.updateProductById);
+    app.delete('/product/delete/:id', VendorOnly, productCtrl.deleteProductById);
 };

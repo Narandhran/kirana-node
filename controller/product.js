@@ -24,9 +24,9 @@ module.exports = {
      * Detete one product
      */
     deleteProductById: (req, res) => {
-        deleteProduct(req, (err, result) => {
+        deleteProductById(req, (err, result) => {
             if (err) errorHandler(req, res, err);
-            else successHandler(req, res, 'Product(s) picture updated successfully', result);
+            else successHandler(req, res, 'Product removed successfully', result);
         });
     },
     /**
