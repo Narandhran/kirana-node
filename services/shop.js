@@ -54,14 +54,37 @@ module.exports = {
      */
     findShopNearBy: async (request, cb) => {
         let sourceCoordinates = request.body;
-        var query = {
-            'location': {
-                '$geoWithin': {
-                    '$centerSphere': [sourceCoordinates, kmToRadian(5)]
+        var query = [
+            {
+                '$geoNear': {
+                    'near': {
+                        'type': 'Point',
+                        'coordinates': sourceCoordinates
+                    },
+                    'distanceField': 'distance',
+                    'maxDistance': 5000,
+                    'query': {
+                        'status': 'Pending'
+                    },
+                    'spherical': false
+                }
+            }, {
+                '$project': {
+                    'name': 1,
+                    'location': 1,
+                    'owner': 1,
+                    'picture': 1,
+                    'distance': {
+                        '$divide': [
+                            '$distance', 1000
+                        ]
+                    },
+                    'isUnavailable': 1
                 }
             }
-        };
-        await Shop.find(query)
+        ];
+
+        await Shop.aggregate(query)
             .exec((err, result) => {
                 cb(err, result);
             });

@@ -39,6 +39,10 @@ var shopSchema = new Schema({
         type: String,
         enum: ['Pending', 'Approve', 'Unavailable', 'Block'],
         default: 'Pending'
+    },
+    isUnavailable: {
+        type: Boolean,
+        default: true
     }
 }, { timestamps: true });
 
