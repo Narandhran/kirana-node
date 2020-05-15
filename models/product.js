@@ -9,7 +9,8 @@ var productSchema = new Schema({
     },
     category_id: {
         type: Schema.Types.ObjectId,
-        ref: 'category'
+        ref: 'category',
+        autopopulate: true
     },
     productCode: {
         type: String,
@@ -44,5 +45,6 @@ productSchema.virtual('getPictures').get(function () {
     });
     return persisted;
 });
+productSchema.plugin(require('mongoose-autopopulate'));
 var Product = model('product', productSchema);
 module.exports = { Product };

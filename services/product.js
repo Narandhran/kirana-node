@@ -1,5 +1,6 @@
 const { Product } = require('../models/product');
 const { loadMulter } = require('./custom/multipart.service');
+const { Types } = require('mongoose');
 const { inspect } = require('util');
 
 module.exports = {
@@ -80,5 +81,47 @@ module.exports = {
             .exec((err, result) => {
                 cb(err, result);
             });
+    },
+    getProductPage: async (request, cb) => {
+        let { shopId } = request.params;
+        await Promise.all([
+            await Product.aggregate([
+                {
+                    '$match': {
+                        'shop_id': Types.ObjectId(shopId)
+                    }
+                }, {
+                    '$group': {
+                        '_id': '$category_id'
+                    }
+                }, {
+                    '$lookup': {
+                        'from': 'categories',
+                        'localField': '_id',
+                        'foreignField': '_id',
+                        'as': 'category'
+                    }
+                }, {
+                    '$replaceRoot': {
+                        'newRoot': {
+                            '$mergeObjects': [
+                                {
+                                    '$arrayElemAt': [
+                                        '$category', 0
+                                    ]
+                                }, '$$ROOT'
+                            ]
+                        }
+                    }
+                }, {
+                    '$project': {
+                        'name': 1,
+                        'description': 1,
+                        'picture': 1
+                    }
+                }
+            ]),
+            await Product.find({ 'shop_id': shopId }).limit(12)
+        ]).then(response => { cb(null, response); }).catch(err => { cb(err, {}); });
     }
 };

@@ -1,5 +1,5 @@
 const { createProduct, listAllProducts, deleteProductById, updateProductById, listAllByCategory,
-    productFilter } = require('../services/product');
+    productFilter, getProductPage } = require('../services/product');
 const { successHandler, errorHandler } = require('../utils/handler');
 
 module.exports = {
@@ -56,6 +56,15 @@ module.exports = {
         productFilter(req, (err, result) => {
             if (err) errorHandler(req, res, err);
             else successHandler(req, res, '', result);
+        });
+    },
+    /**
+     * List category and products
+     */
+    getProductPage: (req, res) => {
+        getProductPage(req, (err, result) => {
+            if (err) errorHandler(req, res, err);
+            else successHandler(req, res, 'Success', result);
         });
     },
 };
