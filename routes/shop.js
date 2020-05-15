@@ -11,5 +11,6 @@ module.exports = app => {
     app.delete('/shop/delete/:id', VendorOnly, shopCtrl.deleteShopById);
 
     /** All Users */
-    app.post('/shop/nearby', AllUsers, shopCtrl.findShopNearBy);
+    app.post('/shop/nearby', shopCtrl.findShopNearBy);
+    app.get('/shop/search/:filter', shopCtrl.shopFilter);
 };

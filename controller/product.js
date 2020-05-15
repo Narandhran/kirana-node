@@ -1,4 +1,5 @@
-const { createProduct, listAllProducts, deleteProductById, updateProductById, listAllByCategory } = require('../services/product');
+const { createProduct, listAllProducts, deleteProductById, updateProductById, listAllByCategory,
+    productFilter } = require('../services/product');
 const { successHandler, errorHandler } = require('../utils/handler');
 
 module.exports = {
@@ -47,5 +48,14 @@ module.exports = {
             if (err) errorHandler(req, res, err);
             else successHandler(req, res, 'Product updated successfully', result);
         });
-    }
+    },
+    /**
+  * User can filter any product
+  */
+    productFilter: (req, res) => {
+        productFilter(req, (err, result) => {
+            if (err) errorHandler(req, res, err);
+            else successHandler(req, res, '', result);
+        });
+    },
 };

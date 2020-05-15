@@ -114,5 +114,11 @@ module.exports = {
             .exec((err, result) => {
                 cb(err, result);
             });
+    },
+    shopFilter: async (request, cb) => {
+        await Shop.find({ name: { $regex: request.params.filter, $options: 'i' } })
+            .exec((err, result) => {
+                cb(err, result);
+            });
     }
 };

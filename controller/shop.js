@@ -1,4 +1,4 @@
-const { findShopNearBy, requestToAddShop, viewShopsByStatus, viewMyShops,
+const { findShopNearBy, requestToAddShop, viewShopsByStatus, viewMyShops, shopFilter,
     respondToAddShop, updateDetails, deleteShopById } = require('../services/shop');
 const { successHandler, errorHandler } = require('../utils/handler');
 module.exports = {
@@ -61,5 +61,14 @@ module.exports = {
             if (err) errorHandler(req, res, err);
             else successHandler(req, res, 'Shop removed successfully', result);
         });
-    }
+    },
+    /**
+     * User can filter any shop
+     */
+    shopFilter: (req, res) => {
+        shopFilter(req, (err, result) => {
+            if (err) errorHandler(req, res, err);
+            else successHandler(req, res, '', result);
+        });
+    },
 };

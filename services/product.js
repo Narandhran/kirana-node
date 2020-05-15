@@ -74,5 +74,11 @@ module.exports = {
             .exec((err, result) => {
                 cb(err, result);
             });
+    },
+    productFilter: async (request, cb) => {
+        await Product.find({ name: { $regex: request.params.filter, $options: 'i' } })
+            .exec((err, result) => {
+                cb(err, result);
+            });
     }
 };

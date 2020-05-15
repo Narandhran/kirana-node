@@ -11,6 +11,7 @@ module.exports = app => {
      */
     app.get('/product/list_by_shop/:id', productCtrl.listAllProducts);
     app.get('/product/list_by_category', productCtrl.listAllByCategory);
+    app.get('/product/search/:filter', productCtrl.productFilter);
 
     /**
      * Vendor
