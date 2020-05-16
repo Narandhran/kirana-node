@@ -69,18 +69,20 @@ module.exports = {
                     'spherical': false
                 }
             }, {
-                '$project': {
-                    'name': 1,
-                    'location': 1,
-                    'owner': 1,
-                    'picture': 1,
-                    'distance': {
-                        '$divide': [
-                            '$distance', 1000
-                        ]
-                    },
-                    'isUnavailable': 1
-                }
+                name: 1,
+                location: 1,
+                owner: 1,
+                picture: 1,
+                distance: {
+                    $concat: [{
+                        $substr: [{
+                            $toString: {
+                                $divide: ['$distance', 1000]
+                            }
+                        }, 0, 3]
+                    }, ' Km']
+                },
+                isUnavailable: 1
             }
         ];
 
