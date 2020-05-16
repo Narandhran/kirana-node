@@ -120,5 +120,12 @@ module.exports = {
             .exec((err, result) => {
                 cb(err, result);
             });
-    }
+    },
+    makeUnavailable: async (request, cb) => {
+        await Shop.
+            findByIdAndUpdate(request.params.id, request.body)
+            .exec((err, result) => {
+                cb(err, result);
+            });
+    },
 };

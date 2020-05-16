@@ -1,5 +1,5 @@
 const { findShopNearBy, requestToAddShop, viewShopsByStatus, viewMyShops, shopFilter,
-    respondToAddShop, updateDetails, deleteShopById } = require('../services/shop');
+    respondToAddShop, updateDetails, deleteShopById, makeUnavailable } = require('../services/shop');
 const { successHandler, errorHandler } = require('../utils/handler');
 module.exports = {
     /**
@@ -69,6 +69,15 @@ module.exports = {
         shopFilter(req, (err, result) => {
             if (err) errorHandler(req, res, err);
             else successHandler(req, res, '', result);
+        });
+    },
+    /**
+     * Make unavailable
+     */
+    makeUnavailable:(req, res) => {
+        makeUnavailable(req, (err, result) => {
+            if (err) errorHandler(req, res, err);
+            else successHandler(req, res, 'Shop is now Unavailable', result);
         });
     },
 };
