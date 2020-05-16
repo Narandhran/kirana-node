@@ -64,25 +64,27 @@ module.exports = {
                     'distanceField': 'distance',
                     'maxDistance': 5000,
                     'query': {
-                        'status': 'Pending'
+                        'status': 'Approve'
                     },
                     'spherical': false
                 }
             }, {
-                name: 1,
-                location: 1,
-                owner: 1,
-                picture: 1,
-                distance: {
-                    $concat: [{
-                        $substr: [{
-                            $toString: {
-                                $divide: ['$distance', 1000]
-                            }
-                        }, 0, 3]
-                    }, ' Km']
-                },
-                isUnavailable: 1
+                '$project': {
+                    name: 1,
+                    location: 1,
+                    owner: 1,
+                    picture: 1,
+                    distance: {
+                        $concat: [{
+                            $substr: [{
+                                $toString: {
+                                    $divide: ['$distance', 1000]
+                                }
+                            }, 0, 3]
+                        }, ' Km']
+                    },
+                    isUnavailable: 1
+                }
             }
         ];
 
