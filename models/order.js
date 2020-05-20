@@ -59,10 +59,10 @@ var orderSchema = new Schema({
         howMany: { type: Number, default: 1 }
     }],
     shipmentDetails: {
-        name: { type: String, minlength: 3, maxlength: 16 },
+        name: { type: String, minlength: 3, maxlength: 36 },
         address: { type: String, minlength: 5, maxlength: 100 },
         phone: { type: String, minlength: 10, maxlength: 10 },
-        landmark: { type: String, minlength: 5, maxlength: 20 }
+        landmark: { type: String }
     },
     status: {
         type: String,
