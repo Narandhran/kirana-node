@@ -21,7 +21,6 @@ module.exports = {
         await Category
             .find({})
             .exec((err, result) => {
-                result.forEach(e => e.picture = e.picture);
                 cb(err, result);
             });
     },

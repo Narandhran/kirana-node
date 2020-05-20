@@ -12,12 +12,11 @@ var addressBookSchema = new Schema({
     flat: { type: String },
     street: { type: String },
     phone1: { type: String, required: true, maxlength: 10, minlength: 10 },
-    phone2: { type: String, required: false, maxlength: 10, minlength: 10 },
     city: { type: String },
     pincode: { type: String, minlength: 6, maxlength: 6 },
     state: { type: String, default: 'Bangalore' },
     country: { type: String, default: 'India' },
-    landmark: { type: String, minlength: 5, maxlength: 16 },
+    landmark: { type: String },
     lat: { type: Number },
     lan: { type: Number }
 }, { timestamps: true });

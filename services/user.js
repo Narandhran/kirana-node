@@ -21,7 +21,7 @@ module.exports = {
         let plainPassword = autoIdGen(6, alphaNumeric);
         userObj.password = encrypt(plainPassword);
         try {
-            if (request.query.isVendor)
+            if (request.query.isVendor == 'true')
                 userObj.role = 'VENDOR';
             else if (isAdmin.length > 0)
                 userObj.role = 'USER';
@@ -83,7 +83,6 @@ module.exports = {
         let projection = 'username fname lname gender phone dob dp';
         let addressBook = await AddressBook.find({ 'user_id': request.verifiedToken._id }).lean();
         await User.findById(request.verifiedToken._id, projection, (err, result) => {
-            if (result.dp != null) result.dp = result.dp;
             cb(err, { result, addressBook });
         });
     },

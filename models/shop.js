@@ -21,6 +21,7 @@ var shopSchema = new Schema({
         },
         coordinates: {
             type: [Number],
+            index: { type: '2dsphere', sparse: false },
             required: true
         }
     },

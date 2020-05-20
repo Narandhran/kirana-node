@@ -30,7 +30,6 @@ var userSchema = new Schema({
     },
     dp: {
         type: String,
-        get: pic => `${config.GET_RESOURCE_BASE_PATH}dp/${pic}`,
         default: undefined
     },
     fcm: {

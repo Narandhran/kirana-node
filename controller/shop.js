@@ -74,10 +74,10 @@ module.exports = {
     /**
      * Make unavailable
      */
-    makeUnavailable:(req, res) => {
+    makeUnavailable: (req, res) => {
         makeUnavailable(req, (err, result) => {
             if (err) errorHandler(req, res, err);
-            else successHandler(req, res, 'Shop is now Unavailable', result);
+            else successHandler(req, res, 'Success', result);
         });
     },
 };

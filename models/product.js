@@ -38,13 +38,6 @@ var productSchema = new Schema({
         type: String
     }
 });
-productSchema.virtual('getPictures').get(function () {
-    let persisted = [];
-    this.pictures.forEach(function (e) {
-        persisted.push(`${config.GET_RESOURCE_BASE_PATH}product/${e}`);
-    });
-    return persisted;
-});
 productSchema.plugin(require('mongoose-autopopulate'));
 var Product = model('product', productSchema);
 module.exports = { Product };

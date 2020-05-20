@@ -47,10 +47,6 @@ module.exports = {
             .find({ 'shop_id': request.params.id })
             .populate({ path: 'category_id', select: 'name' })
             .exec((err, result) => {
-                if (!err)
-                    result.forEach(e => {
-                        e.pictures = e.getPictures;
-                    });
                 cb(err, result);
             });
     },
@@ -62,10 +58,6 @@ module.exports = {
             })
             .populate({ path: 'category_id', select: 'name' })
             .exec((err, result) => {
-                if (!err)
-                    result.forEach(e => {
-                        e.pictures = e.getPictures;
-                    });
                 cb(err, result);
             });
     },

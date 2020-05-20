@@ -12,8 +12,7 @@ var categorySchema = new Schema({
         type: String
     },
     picture: {
-        type: String,
-        get: pic => `${config.GET_RESOURCE_BASE_PATH}category/${pic}`,
+        type: String
     }
 });
 
