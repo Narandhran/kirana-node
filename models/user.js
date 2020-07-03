@@ -5,7 +5,7 @@ const config = require('../config')[process.env.NODE_ENV];
 
 var userSchema = new Schema({
     fname: { type: String, required: true, minlength: 3, maxlength: 16 },
-    lname: { type: String, required: true, minlength: 3, maxlength: 16 },
+    lname: { type: String, required: false, minlength: 3, maxlength: 16 },
     username: {
         type: String,
         unique: true,
@@ -19,7 +19,7 @@ var userSchema = new Schema({
         required: [true, 'Email is required']
     },
     password: String,
-    dob: { type: Date, required: true },
+    dob: { type: Date, required: false },
     gender: { type: String, enum: ['male', 'female', 'other'] },
     phone: {
         type: String,

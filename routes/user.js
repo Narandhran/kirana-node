@@ -12,6 +12,7 @@ module.exports = app => {
      */
     app.post('/user/register', userCtrl.registration);
     app.post('/user/login', userCtrl.login);
+    app.post('/user/login_otp',userCtrl.loginOtp);
     app.put('/user/update', AllUsers, userCtrl.updateUserById);
     app.post('/user/update_dp', AllUsers, userCtrl.updateDisplayPicture);
     app.get('/user/get_my_data', AllUsers, userCtrl.getUserById);

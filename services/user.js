@@ -6,6 +6,9 @@ const { sign } = require('./custom/jwt.service');
 const { loadMulter } = require('./custom/multipart.service');
 const { onlyNumber, autoIdGen, alphaNumeric } = require('../utils/autogen');
 const { addTime } = require('../utils/date.util');
+const { request } = require('express');
+const axios = require('axios').default;
+const moment = require('moment');
 const config = require('../config')[process.env.NODE_ENV];
 const collection = 'users';
 
@@ -16,37 +19,67 @@ const collection = 'users';
 module.exports = {
 
     registration: async (request, cb) => {
-        let userObj = request.body;
+        let { username, phone, password, fname, lname = null, role = 'ADMIN' } = request.body;
         let isAdmin = await User.find({}).lean();
-        let plainPassword = autoIdGen(6, alphaNumeric);
-        userObj.password = encrypt(plainPassword);
-        try {
-            if (request.query.isVendor == 'true')
-                userObj.role = 'VENDOR';
-            else if (isAdmin.length > 0)
-                userObj.role = 'USER';
-            else userObj.role = 'ADMIN';
-            let isUser = await User.create(userObj);
-            if (isUser) {
-                let mailOption = await generateTemplate({ fullname: isUser.fullname, username: isUser.username, password: plainPassword }, 'registration/userRegistration.html');
-                transporter.sendMail({
-                    from: '"no-reply@get2basket.com" <Signvisionsolutionpvt@gmail.com>',
-                    to: isUser.username,
-                    subject: 'login credential for Get2Basket',
-                    html: mailOption
-                }, (error, result) => {
-                    cb(error, result);
-                });
-            }
-            else cb(new Error('Error while registering an employee'));
-        } catch (error) {
-            cb(error);
-        }
-    },
+        if (request.query.isVendor == 'true')
+            role = 'VENDOR';
+        else if (isAdmin.length > 0)
+            role = 'USER';
+        else role = 'ADMIN';
+        let isUserPhone = await User.findOne({ 'phone': phone });
+        let isUserEmail = await User.findOne({ 'username': username });
+        if (isUserPhone) cb(new Error('Phone number already exist', {}));
+        else if (isUserEmail) cb(new Error('Email already exist', {}));
+        else
+            await User.create({
+                username,
+                phone,
+                password: encrypt(password),
+                fname,
+                lname,
+                role
+            }, (err, result) => {
+                cb(err, result);
+            });
 
+    },
+    loginOtp: async (request, cb) => {
+        let { username, otp, fcm } = request.body;
+        let isUser = await User.findOne({
+            '$or': [
+                { 'phone': username, 'active': true },
+                { 'username': username, 'active': true }
+            ]
+        });
+        if (isUser) {
+            isUser.fcm = fcm;
+            await isUser.save();
+            console.log(new Date());
+            console.log( moment(isUser.verify.expire).add(15, 'm').toDate());
+            if (new Date() < moment(isUser.verify.expire).add(15, 'm').toDate()) {
+                if (isUser.verify.otp == otp) {
+                    let token = {};
+                    try {
+                        token = sign({
+                            _id: isUser._id,
+                            email: isUser.username,
+                            role: isUser.role,
+                            fullname: isUser.fullname
+                        });
+                        cb(null, { role: isUser.role, token, rpath: config.GET_RESOURCE_BASE_PATH });
+                    } catch (e) { cb(e, {}); };
+                } else cb(new Error('OTP invalid, try again!'), {});
+            } else cb(new Error('OTP expired'));
+        } else cb(new Error('Mobile number not registered'), {});
+    },
     login: async (request, cb) => {
         let { username, password, fcm } = request.body;
-        let isUser = await User.findOne({ 'username': username, 'active': true });
+        let isUser = await User.findOne({
+            '$or': [
+                { 'phone': username, 'active': true },
+                { 'username': username, 'active': true }
+            ]
+        });
         if (isUser) {
             isUser.fcm = fcm;
             await isUser.save();
@@ -96,27 +129,40 @@ module.exports = {
             });
     },
     requestOtp: async (request, cb) => {
-        let isUser = await User.findOne({ 'username': request.body.email });
+        let { username, subject } = request.body;
+        let isUser = await User.findOne({
+            '$or': [
+                { 'phone': username, 'active': true },
+                { 'username': username, 'active': true }
+            ]
+        });
         if (isUser) {
             let otp = autoIdGen(5, onlyNumber);
             isUser.verify.otp = otp;
             isUser.verify.expireTime = addTime({ min: 10 });
             await isUser.save();
             let mailOption = await generateTemplate({ fullname: `${isUser.fname} ${isUser.lname}`, otp: otp, message: 'reset your password' }, 'registration/sendOtp.html');
-            await transporter.sendMail({
-                from: '"no-reply@get2basket.com" <Signvisionsolutionpvt@gmail.com>',
-                to: isUser.username,
-                subject: 'One Time Password to resetting password!!',
-                html: mailOption
-            }, (error, result) => {
-                console.log(result);
-                cb(error, 'Otp sent successfully');
-            });
+            Promise.all([
+                await axios.get(config.smsGateWay.uri(isUser.phone, `Hi ${isUser.fullname}, your OTP is ${otp} will expire in another 15 mins. Kindly use this for login, don't share it with anyone. Have a great day, Team SignVision.`)),
+                await transporter.sendMail({
+                    from: '"no-reply@get2basket.com" <Signvisionsolutionpvt@gmail.com>',
+                    to: isUser.username,
+                    subject: subject,
+                    html: mailOption
+                })
+            ]).then(result => {
+                cb(null, 'OTP send successfully');
+            }).catch(e => { cb(e, {}); });
         } else cb(new Error('Invalid Email address'), {});
     },
     resetPassword: async (request, cb) => {
-        let { email, otp, password } = request.body;
-        let isUser = await User.findOne({ 'username': email });
+        let { username, otp, password } = request.body;
+        let isUser = await User.findOne({
+            '$or': [
+                { 'phone': username, 'active': true },
+                { 'username': username, 'active': true }
+            ]
+        });
         if (isUser) {
             if (password.length > 5) {
                 if (isUser.verify.expireTime >= new Date()) {

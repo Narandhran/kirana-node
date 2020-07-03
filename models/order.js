@@ -61,8 +61,19 @@ var orderSchema = new Schema({
     shipmentDetails: {
         name: { type: String, minlength: 3, maxlength: 36 },
         address: { type: String, minlength: 5, maxlength: 100 },
-        phone: { type: String, minlength: 10, maxlength: 10 },
+        mobile: { type: String, minlength: 10, maxlength: 10 },
         landmark: { type: String }
+    },
+    deliverySlot: {
+        slot: {
+            type: String,
+            enum: ['Morning','Afternoon','Evening'],
+            required: true
+        },
+        time: {
+            type: String,
+            required: true
+        }
     },
     status: {
         type: String,
