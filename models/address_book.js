@@ -18,7 +18,8 @@ var addressBookSchema = new Schema({
     country: { type: String, default: 'India' },
     landmark: { type: String },
     lat: { type: Number },
-    lan: { type: Number }
+    lan: { type: Number },
+    isDefault: { type: Boolean, default: false }
 }, { timestamps: true });
 
 var AddressBook = model('address_book', addressBookSchema);

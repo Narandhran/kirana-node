@@ -67,7 +67,7 @@ module.exports = {
                 'id': razorpay_order_id
             }, {
                 'isPaymentSuccess': true,
-                'trackingStatus': 'ordered'
+                'trackingStatus': 'Processing'
             }, (err, result) => {
                 cb(err, result);
             });
@@ -77,6 +77,7 @@ module.exports = {
     findOrderByUser: async (request, cb) => {
         Order
             .find({ user_id: request.verifiedToken._id })
+            .populate({path: 'shop_id', select: 'name picture'})
             .sort({ 'createdAt': -1 })
             .exec((err, result) => {
                 cb(err, result);
