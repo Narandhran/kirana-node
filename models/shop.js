@@ -44,6 +44,22 @@ var shopSchema = new Schema({
     isUnavailable: {
         type: Boolean,
         default: true
+    },
+    banner: {
+        type: [String],
+        required: false,
+        default: []
+    },
+    deliveryFee: {
+        type: Number,
+        required: false,
+        default: 0
+    },
+    promoCode: {
+        type: String,
+        required: false,
+        default: null,
+        maxlength: 8
     }
 }, { timestamps: true });
 

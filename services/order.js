@@ -77,7 +77,7 @@ module.exports = {
     findOrderByUser: async (request, cb) => {
         Order
             .find({ user_id: request.verifiedToken._id })
-            .populate({path: 'shop_id', select: 'name picture'})
+            .populate({ path: 'shop_id', select: 'name picture' })
             .sort({ 'createdAt': -1 })
             .exec((err, result) => {
                 cb(err, result);
@@ -89,7 +89,7 @@ module.exports = {
             .populate({ path: 'productDetails.product_id', select: 'name brand productCode' })
             .populate({ path: 'user_id', select: 'fname lname address' })
             .lean();
-        if (isOrder) {
+        if (isOrder.trackingStatus == 'Delivered') {
             isOrder.createdAt = moment.utc(isOrder.createdAt).local().format('YYYY-MM-DD HH:mm:ss');
             generatePdf(
                 {
@@ -105,6 +105,8 @@ module.exports = {
                 (err, result) => cb(err, result)
             );
         }
+        else
+            cb(new Error('Invoice is only for successful delivery of any order'), {});
     },
     findOrdersByVendor: async (request, cb) => {
         let { status = 'ALL' } = request.params;

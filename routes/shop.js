@@ -10,8 +10,10 @@ module.exports = app => {
     app.get('/shop/list_my_shops', VendorOnly, shopCtrl.viewMyShops);
     app.delete('/shop/delete/:id', VendorOnly, shopCtrl.deleteShopById);
     app.put('/shop/make_unavail/:id', VendorOnly, shopCtrl.makeUnavailable);
+    app.put('/shop/create_update_banner/:id', VendorAndAdmin, shopCtrl.createOrUpdateBanner);
 
     /** All Users */
     app.post('/shop/nearby', shopCtrl.findShopNearBy);
     app.get('/shop/search/:filter', shopCtrl.shopFilter);
+    app.get('/shop/list_banner_shop/:id', shopCtrl.getBannersByShopId);
 };

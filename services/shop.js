@@ -2,6 +2,7 @@ const { Shop } = require('../models/shop');
 const { kmToRadian } = require('./custom/geo.service');
 const { loadMulter } = require('./custom/multipart.service');
 const { inspect } = require('util');
+const { request } = require('express');
 
 module.exports = {
     /**
@@ -132,4 +133,25 @@ module.exports = {
                 cb(err, result);
             });
     },
+    createOrUpdateBanner: async (request, cb) => {
+        let upload = loadMulter.single('banner');
+        await upload(request, null, async (err) => {
+            if (err)
+                cb(err, {});
+            else {
+                await Shop
+                    .findByIdAndUpdate(request.params.id, { '$push': { 'banner': request.file.key } })
+                    .exec((err, result) => {
+                        cb(err, result);
+                    });
+            }
+        });
+    },
+    getBannersByShopId: async (request, cb) => {
+        await Shop
+            .findById(request.params.id, 'banner')
+            .exec((err, result) => {
+                cb(err, result);
+            });
+    }
 };

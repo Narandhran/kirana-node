@@ -1,5 +1,5 @@
-const { findShopNearBy, requestToAddShop, viewShopsByStatus, viewMyShops, shopFilter,
-    respondToAddShop, updateDetails, deleteShopById, makeUnavailable } = require('../services/shop');
+const { findShopNearBy, requestToAddShop, viewShopsByStatus, viewMyShops, shopFilter, createOrUpdateBanner
+    respondToAddShop, updateDetails, deleteShopById, makeUnavailable, getBannersByShopId } = require('../services/shop');
 const { successHandler, errorHandler } = require('../utils/handler');
 module.exports = {
     /**
@@ -76,6 +76,18 @@ module.exports = {
      */
     makeUnavailable: (req, res) => {
         makeUnavailable(req, (err, result) => {
+            if (err) errorHandler(req, res, err);
+            else successHandler(req, res, 'Success', result);
+        });
+    },
+    createOrUpdateBanner: (req, res) => {
+        createOrUpdateBanner(req, (err, result) => {
+            if (err) errorHandler(req, res, err);
+            else successHandler(req, res, 'Success', result);
+        });
+    },
+    getBannersByShopId: (req, res) => {
+        getBannersByShopId(req, (err, result) => {
             if (err) errorHandler(req, res, err);
             else successHandler(req, res, 'Success', result);
         });

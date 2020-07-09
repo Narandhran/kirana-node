@@ -52,10 +52,12 @@ module.exports = {
             ]
         });
         if (isUser) {
-            isUser.fcm = fcm;
-            await isUser.save();
-            console.log(new Date());
-            console.log( moment(isUser.verify.expire).add(15, 'm').toDate());
+            if (!(isUser.fcm.some(e => {
+                return e == fcm;
+            }))) {
+                isUser.fcm.push(fcm);
+                await isUser.save();
+            };
             if (new Date() < moment(isUser.verify.expire).add(15, 'm').toDate()) {
                 if (isUser.verify.otp == otp) {
                     let token = {};
@@ -81,8 +83,12 @@ module.exports = {
             ]
         });
         if (isUser) {
-            isUser.fcm = fcm;
-            await isUser.save();
+            if (!(isUser.fcm.some(e => {
+                return e == fcm;
+            }))) {
+                isUser.fcm.push(fcm);
+                await isUser.save();
+            };
             if (validate(password, isUser.password)) {
                 try {
                     let token = sign({
