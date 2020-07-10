@@ -44,8 +44,7 @@ module.exports = {
     },
     viewMyShops: async (request, cb) => {
         await Shop
-            .find({ 'vendor_id': request.verifiedToken._id },
-                'name location owner status picture createdAt isUnavailable, banner, deliveryFee, promo')
+            .find({ 'vendor_id': request.verifiedToken._id })
             .sort({ 'createdAt': -1 })
             .exec((err, result) => {
                 cb(err, result);
@@ -73,9 +72,15 @@ module.exports = {
             }, {
                 '$project': {
                     name: 1,
+                    vendor_id: 1,
                     location: 1,
                     owner: 1,
                     picture: 1,
+                    isUnavailable: 1,
+                    status: 1,
+                    banner: 1,
+                    deliveryFee: 1,
+                    promo: 1,
                     distance: {
                         $concat: [{
                             $substr: [{
@@ -85,7 +90,6 @@ module.exports = {
                             }, 0, 3]
                         }, ' Km']
                     },
-                    isUnavailable: 1
                 }
             }
         ];
@@ -115,7 +119,7 @@ module.exports = {
         let { status = 'ALL' } = request.params;
         let query = status == 'ALL' ? {} : { 'status': status };
         await Shop
-            .find(query, 'name location owner status picture createdAt isUnavailable, banner, deliveryFee, promo')
+            .find(query)
             .sort({ 'createdAt': -1 })
             .exec((err, result) => {
                 cb(err, result);
