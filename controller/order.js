@@ -1,5 +1,5 @@
 const { findOrderByUser, placeOrder, getInvoice, paymentVerification,
-    findOrdersByVendor, viewOrdersByVendor } = require('../services/order');
+    findOrdersByVendor, viewOrdersByVendor,applyPromo } = require('../services/order');
 const { successHandler, errorHandler } = require('../utils/handler');
 module.exports = {
     placeOrder: (req, res) => {
@@ -32,5 +32,11 @@ module.exports = {
             if (err) errorHandler(req, res, err);
             else successHandler(req, res, 'Order(s) listed successfully', result);
         });
-    }
+    },
+    applyPromo:(req, res) => {
+        applyPromo(req, (err, result) => {
+            if (err) errorHandler(req, res, err);
+            else successHandler(req, res, 'Applied successfully', result);
+        });
+    },
 };

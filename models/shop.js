@@ -38,7 +38,7 @@ var shopSchema = new Schema({
     },
     status: {
         type: String,
-        enum: ['Pending', 'Approve', 'Unavailable', 'Block'],
+        enum: ['Pending', 'Approve', 'Unavailable', 'Remove'],
         default: 'Pending'
     },
     isUnavailable: {
@@ -55,11 +55,10 @@ var shopSchema = new Schema({
         required: false,
         default: 0
     },
-    promoCode: {
-        type: String,
-        required: false,
-        default: null,
-        maxlength: 8
+    promo: {
+        code: { type: String, maxlength: 8 },
+        value: { type: Number, max: 999 },
+        exp: { type: Date }
     }
 }, { timestamps: true });
 

@@ -6,7 +6,7 @@
             padding: 2%;
         }
         
-        p:nth-child(2) {
+        p:nth-child(3) {
             color: green;
             font-size: 1.2rem;
             margin-left: 2%;
@@ -48,11 +48,12 @@
     <div class="order-details">
         <div class="left-section">
             <p>Order ID : {{this.orderId}}</p>
-            <button> <a  href="https://www.neerwash.com/cart"> View Orders</a></button>
+            <button> <a  href="https://www.signvisionsolution.com"> View Orders</a></button>
         </div>
         <div class="right-section">
             <p>Subtotal: &#8377; {{this.subTotal}}</p>
-            <p>Tax: &#8377; {{this.tax}}</p>
+            <p>Delivery Fee: &#8377; {{this.deliveryFee}}</p>
+            <p>Discount: &#8377; {{this.discount}}</p>
             <p> <strong> Total: &#8377; {{this.total}}</strong></p>
         </div>
     </div>

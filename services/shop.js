@@ -44,7 +44,8 @@ module.exports = {
     },
     viewMyShops: async (request, cb) => {
         await Shop
-            .find({ 'vendor_id': request.verifiedToken._id }, 'name location owner status picture createdAt isUnavailable')
+            .find({ 'vendor_id': request.verifiedToken._id },
+                'name location owner status picture createdAt isUnavailable, banner, deliveryFee, promo')
             .sort({ 'createdAt': -1 })
             .exec((err, result) => {
                 cb(err, result);
@@ -99,16 +100,22 @@ module.exports = {
      */
     respondToAddShop: async (request, cb) => {
         let { status, shopId } = request.body;
-        await Shop.findByIdAndUpdate(shopId, { status }, { new: true })
-            .exec((err, result) => {
+        if (status == 'Remove') {
+            await Shop.findByIdAndRemove(shopId, (err, result) => {
                 cb(err, result);
             });
+        } else {
+            await Shop.findByIdAndUpdate(shopId, { status }, { new: true })
+                .exec((err, result) => {
+                    cb(err, result);
+                });
+        }
     },
     viewShopsByStatus: async (request, cb) => {
         let { status = 'ALL' } = request.params;
         let query = status == 'ALL' ? {} : { 'status': status };
         await Shop
-            .find(query, 'name location owner status picture createdAt isUnavailable')
+            .find(query, 'name location owner status picture createdAt isUnavailable, banner, deliveryFee, promo')
             .sort({ 'createdAt': -1 })
             .exec((err, result) => {
                 cb(err, result);

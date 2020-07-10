@@ -5,6 +5,10 @@ var orderSchema = new Schema({
         type: String,
         unique: true
     },
+    orderId: {
+        type: Number,
+        unique: true
+    },
     shop_id: {
         type: Schema.Types.ObjectId,
         ref: 'shop'
@@ -43,8 +47,16 @@ var orderSchema = new Schema({
     tax: {
         type: Number
     },
+    deliveryFee: {
+        type: Number,
+        default: 0
+    },
     amount: {
         type: Number
+    },
+    discount: {
+        type: Number,
+        required: false
     },
     productDetails: [{
         product_id: {
@@ -67,7 +79,7 @@ var orderSchema = new Schema({
     deliverySlot: {
         slot: {
             type: String,
-            enum: ['Morning','Afternoon','Evening'],
+            enum: ['Morning', 'Afternoon', 'Evening'],
             required: true
         },
         time: {
@@ -84,7 +96,7 @@ var orderSchema = new Schema({
     trackingStatus: {
         type: String,
         default: 'NA',
-        enum: ['Processing', 'Delivered','NA']
+        enum: ['Processing', 'Delivered', 'NA']
     }
 }, { timestamps: true });
 orderSchema.plugin(require('mongoose-unique-validator'));

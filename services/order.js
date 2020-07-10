@@ -1,6 +1,7 @@
 const { Order } = require('../models/order');
 const { Shop } = require('../models/shop');
-const { alphaNumeric, autoIdGen } = require('../utils/autogen');
+const { User } = require('../models/user');
+const { alphaNumeric, autoIdGen, onlyNumber } = require('../utils/autogen');
 const { generateTemplate, transporter } = require('./custom/mailer.service');
 const { generatePdf } = require('./custom/pdf.service');
 const { createOrder, verify } = require('./custom/razorpay.service');
@@ -8,69 +9,79 @@ const moment = require('moment');
 module.exports = {
     placeOrder: async (request, cb) => {
         let orderObj = request.body;
+        let isUser = User.findById(request.verifiedToken._id);
         orderObj.receipt = autoIdGen(8, alphaNumeric);
+        orderObj.orderId = autoIdGen(8, onlyNumber);
         orderObj.user_id = request.verifiedToken._id;
-        createOrder(orderObj, (err, result) => {
-            if (err) cb(new Error('Order attempt failed', {}));
-            else {
-                let persisted = { ...orderObj, ...result };
-                Order.create(persisted, (err, result) => {
+        if (orderObj.modeOfPayment == 'online') {
+            await createOrder(orderObj, async (err, result) => {
+                if (err) cb(new Error('Order attempt failed', {}));
+                else {
+                    let persisted = { ...orderObj, ...result };
+                    await Order.create(persisted, async (err, result) => {
+                        cb(err, result);
+                    });
+                }
+            });
+        } else {
+            let persisted = orderObj;
+            persisted.trackingStatus = 'Processing';
+            await Order.create(orderObj, async (err, result) => {
+                let mailOption = await generateTemplate({
+                    fullname: isUser.fullname,
+                    orderId: result.orderId,
+                    subTotal: result.subTotal,
+                    deliveryFee: result.deliveryFee,
+                    discount: result.discount,
+                    total: result.amount
+                }, 'order/orderConfirm.html');
+                Promise.all([
+                    await axios.get(config.smsGateWay.uri(isUser.phone, `Hi ${isUser.fullname}, your order has been placed successfully. Kindly note the order reference number ${persisted.orderId} for further communication. Have a great day, Team SignVision.`)),
+                    await transporter.sendMail({
+                        from: '"no-reply@get2basket.com" <Signvisionsolutionpvt@gmail.com>',
+                        to: isUser.username,
+                        subject: subject,
+                        html: mailOption
+                    })
+                ]).then(result => {
                     cb(err, result);
-                });
-            }
-        });
-        /*
-        try {
-            let isOrder = await Order.create(orderObj);
-            if (isOrder) {
-                await Cart.deleteMany({ 'user_id': request.verifiedToken._id }).lean();
-                let userMailOption = await generateTemplate({
-                    fullname: isOrder.shipmentDetails.billingAddress.name,
-                    orderId: isOrder.orderId,
-                    subTotal: isOrder.subTotal,
-                    tax: isOrder.tax,
-                    total: isOrder.totalPrice
-                }, 'orderConfirm.html');
-                await transporter.sendMail({
-                    from: '"no-reply@neerwash.com" <bugs@reelbox.tv',
-                    to: isOrder.shipmentDetails.billingAddress.email,
-                    subject: 'Ordered from NeerWash',
-                    html: userMailOption
-                }, (error, result) => {
-                    cb(error, { orderId: isOrder.orderId });
-                });
-                let adminMailOption = await generateTemplate({
-                    userFullname: isOrder.shipmentDetails.billingAddress.name,
-                    orderId: isOrder.orderId,
-                    subTotal: isOrder.subTotal,
-                    tax: isOrder.tax,
-                    total: isOrder.totalPrice
-                }, 'orderNotifAdmin.html');
-                await transporter.sendMail({
-                    from: '"no-reply@neerwash.com" <bugs@reelbox.tv',
-                    to: ['suresh@multicitydigital.com', 'accounts@reelbox.tv'],
-                    subject: 'Order Notification',
-                    html: adminMailOption
-                });
-            }
-            else cb(new Error('Error while saving order to database'));
-        } catch (error) {
-            cb(error);
-        };
-        */
+                }).catch(e => { cb(e, {}); });
+            });
+        }
     },
     paymentVerification: async (request, cb) => {
         let { razorpay_order_id, razorpay_payment_id, razorpay_signature } = request.body;
         let isVerified = verify(razorpay_order_id, razorpay_payment_id, razorpay_signature);
+        let isUser = User.findById(request.verifiedToken._id);
         if (isVerified) {
-            await Order.updateOne({
-                'id': razorpay_order_id
-            }, {
-                'isPaymentSuccess': true,
-                'trackingStatus': 'Processing'
-            }, (err, result) => {
-                cb(err, result);
-            });
+            await Order
+                .findOneAndUpdate({
+                    'id': razorpay_order_id
+                }, {
+                    'isPaymentSuccess': true,
+                    'trackingStatus': 'Processing'
+                }, { new: true })
+                .exec(async (err, result) => {
+                    let mailOption = await generateTemplate({
+                        fullname: isUser.fullname,
+                        orderId: result.orderId,
+                        subTotal: result.subTotal,
+                        deliveryFee: result.deliveryFee,
+                        discount: result.discount,
+                        total: result.amount
+                    }, 'order/orderConfirm.html');
+                    Promise.all([
+                        await axios.get(config.smsGateWay.uri(isUser.phone, `Hi ${isUser.fullname}, your order has been placed successfully. Kindly note the order reference number ${persisted.id} for further communication. Have a great day, Team SignVision.`)),
+                        await transporter.sendMail({
+                            from: '"no-reply@get2basket.com" <Signvisionsolutionpvt@gmail.com>',
+                            to: isUser.username,
+                            subject: subject,
+                            html: mailOption
+                        })
+                    ]).then(result => {
+                        cb(err, result);
+                    }).catch(e => { cb(e, {}); });
+                });
         }
         else cb(new Error('Payment verification failed', {}));
     },
@@ -119,5 +130,18 @@ module.exports = {
             .exec((err, result) => {
                 cb(err, result);
             });
+    },
+    applyPromo: async (request, cb) => {
+        let { promoCode, subTotal, deliveryFee, discount = 0, total = 0, exp } = request.body;
+        let isShop = await Shop.findById(request.params.id);
+        if (isShop.promo.exp >= new Date()) {
+            if (isShop.promo.code == promoCode) {
+                discount = isShop.promo.value;
+                total = subTotal + isShop.deliveryFee - discount;
+                deliveryFee = isShop.deliveryFee;
+                cb(null, { discount, deliveryFee, subTotal, total });
+            } else
+                cb(null, 'Promo code is not valid!');
+        } else cb(null, 'Promo expired, try new code!');
     }
 };
