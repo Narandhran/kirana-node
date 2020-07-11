@@ -50,6 +50,16 @@ var shopSchema = new Schema({
         required: false,
         default: 0
     },
+    deliverySlot: {
+        slot: {
+            type: String,
+            enum: ['Morning', 'Afternoon', 'Evening'],
+            required: true
+        },
+        time: {
+            type: String
+        }
+    },
     promo: {
         code: { type: String, maxlength: 8 },
         value: { type: Number, max: 999 },

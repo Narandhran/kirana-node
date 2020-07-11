@@ -18,6 +18,9 @@ module.exports = {
                 let persisted = JSON.parse(request.body.textField);
                 persisted.vendor_id = request.verifiedToken._id;
                 persisted.picture = request.file.key;
+                if (persisted.deliverySlot.slot == 'Morning') persisted.deliverySlot.time = '07:00 to 10:00';
+                else if (persisted.deliverySlot.slot == 'Afternoon') persisted.deliverySlot.time = '12:00 to 01:30';
+                else persisted.deliverySlot.time = '04: 00 to 07:00';
                 Shop.create(persisted, (err, result) => {
                     cb(err, result);
                 });
