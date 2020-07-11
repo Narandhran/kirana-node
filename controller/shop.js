@@ -1,5 +1,5 @@
 const { findShopNearBy, requestToAddShop, viewShopsByStatus, viewMyShops, shopFilter, createOrUpdateBanner
-    , respondToAddShop, updateDetails, deleteShopById, makeUnavailable, getBannersByShopId } = require('../services/shop');
+    , respondToAddShop, updateDetails, deleteShopById, makeUnavailable, getBannersByShopId,generatePromo } = require('../services/shop');
 const { successHandler, errorHandler } = require('../utils/handler');
 module.exports = {
     /**
@@ -92,4 +92,10 @@ module.exports = {
             else successHandler(req, res, 'Success', result);
         });
     },
+    generatePromo: (req, res) => {
+        generatePromo(req, (err, result) => {
+            if (err) errorHandler(req, res, err);
+            else successHandler(req, res, 'Success', result);
+        });
+    }
 };

@@ -11,6 +11,7 @@ module.exports = app => {
     app.delete('/shop/delete/:id', VendorOnly, shopCtrl.deleteShopById);
     app.put('/shop/make_unavail/:id', VendorOnly, shopCtrl.makeUnavailable);
     app.put('/shop/create_update_banner/:id', VendorAndAdmin, shopCtrl.createOrUpdateBanner);
+    app.get('/shop/generate_promo/:id', VendorOnly, shopCtrl.generatePromo);
 
     /** All Users */
     app.post('/shop/nearby', shopCtrl.findShopNearBy);

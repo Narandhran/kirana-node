@@ -15,4 +15,5 @@ module.exports = app => {
      * Vendor
      */
     app.get('/order/view/:status', VendorOnly, orderCtrl.findOrdersByVendor);
+    app.put('/order/update_delivery_status/:id',VendorOnly,orderCtrl.updateDeliveryStatus);
 };

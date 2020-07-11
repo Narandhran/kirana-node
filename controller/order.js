@@ -1,4 +1,4 @@
-const { findOrderByUser, placeOrder, getInvoice, paymentVerification,
+const { findOrderByUser, placeOrder, getInvoice, paymentVerification,updateDeliveryStatus,
     findOrdersByVendor, viewOrdersByVendor,applyPromo } = require('../services/order');
 const { successHandler, errorHandler } = require('../utils/handler');
 module.exports = {
@@ -39,4 +39,10 @@ module.exports = {
             else successHandler(req, res, 'Applied successfully', result);
         });
     },
+    updateDeliveryStatus:(req, res) => {
+        updateDeliveryStatus(req, (err, result) => {
+            if (err) errorHandler(req, res, err);
+            else successHandler(req, res, 'Updated successfully', result);
+        });
+    }
 };

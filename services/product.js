@@ -1,18 +1,18 @@
 const { Product } = require('../models/product');
-const { loadMulter } = require('./custom/multipart.service');
+const { loadMulter } = require('./custom/multers3.service');
 const { Types } = require('mongoose');
 const { inspect } = require('util');
 
 module.exports = {
     createProduct: async (request, cb) => {
-        let upload = loadMulter.array('products', 3);
+        let upload = loadMulter(5,'products').array('products', 3);
         await upload(request, null, (err) => {
             if (err)
                 cb(err, {});
             else {
                 let persisted = JSON.parse(request.body.textField);
                 persisted.pictures = request.files.map(e => {
-                    return e.filename;
+                    return e.key;
                 });
                 Product.create(persisted, (err, result) => {
                     cb(err, result);
@@ -21,7 +21,7 @@ module.exports = {
         });
     },
     updateProductById: async (request, cb) => {
-        let upload = loadMulter.array('products', 3);
+        let upload = loadMulter(5,'products').array('products', 3);
         await upload(request, null, (err) => {
             if (err) {
                 cb(err, {});
@@ -31,7 +31,7 @@ module.exports = {
                 persisted = JSON.parse(request.body.textField);
                 if (request.files)
                     persisted.pictures = request.files.map(e => {
-                        return e.filename;
+                        return e.key;
                     });
                 Product
                     .findByIdAndUpdate(request.params.id, persisted, { new: true })

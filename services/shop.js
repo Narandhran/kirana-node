@@ -1,6 +1,7 @@
 const { Shop } = require('../models/shop');
 const { kmToRadian } = require('./custom/geo.service');
-const { loadMulter } = require('./custom/multipart.service');
+const { alphaNumeric, autoIdGen, onlyNumber } = require('../utils/autogen');
+const { loadMulter } = require('./custom/multers3.service');
 const { inspect } = require('util');
 const { request } = require('express');
 
@@ -9,14 +10,14 @@ module.exports = {
      * Only vendor
      */
     requestToAddShop: async (request, cb) => {
-        let upload = loadMulter.single('shop');
+        let upload = loadMulter(5,'shop').single('shop');
         await upload(request, null, (err) => {
             if (err)
                 cb(err, {});
             else {
                 let persisted = JSON.parse(request.body.textField);
                 persisted.vendor_id = request.verifiedToken._id;
-                persisted.picture = request.file.filename;
+                persisted.picture = request.file.key;
                 Shop.create(persisted, (err, result) => {
                     cb(err, result);
                 });
@@ -24,7 +25,7 @@ module.exports = {
         });
     },
     updateDetails: async (request, cb) => {
-        let upload = loadMulter.single('shop');
+        let upload = loadMulter(5,'shop').single('shop');
         await upload(request, null, (err) => {
             if (err) {
                 cb(err, {});
@@ -33,7 +34,7 @@ module.exports = {
                 let persisted = {};
                 persisted = JSON.parse(request.body.textField);
                 if (request.file)
-                    persisted.picture = request.file.filename;
+                    persisted.picture = request.file.key;
                 // console.log('persisted: ' + persisted);
                 Shop.findByIdAndUpdate(request.params.id, persisted, { new: true })
                     .exec((err, result) => {
@@ -144,25 +145,17 @@ module.exports = {
                 cb(err, result);
             });
     },
-    createOrUpdateBanner: async (request, cb) => {
-        let upload = loadMulter.single('banner');
-        await upload(request, null, async (err) => {
-            if (err)
-                cb(err, {});
-            else {
-                await Shop
-                    .findByIdAndUpdate(request.params.id, { '$push': { 'banner': request.file.key } })
-                    .exec((err, result) => {
-                        cb(err, result);
-                    });
-            }
-        });
-    },
     getBannersByShopId: async (request, cb) => {
         await Shop
             .findById(request.params.id, 'banner')
             .exec((err, result) => {
                 cb(err, result);
             });
+    },
+    generatePromo: async (request, cb) => {
+        let isShop = await Shop.findById(request.params.id);
+        isShop.promo.code = autoIdGen(8, alphaNumeric).toUpperCase();
+        await isShop.save();
+        cb(null, isShop.promo.code);
     }
 };

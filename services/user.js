@@ -3,7 +3,7 @@ const { AddressBook } = require('../models/address_book');
 const { encrypt, validate } = require('./custom/crypto.service');
 const { generateTemplate, transporter } = require('./custom/mailer.service');
 const { sign } = require('./custom/jwt.service');
-const { loadMulter } = require('./custom/multipart.service');
+const { loadMulter } = require('./custom/multers3.service');
 const { onlyNumber, autoIdGen, alphaNumeric } = require('../utils/autogen');
 const { addTime } = require('../utils/date.util');
 const { request } = require('express');
@@ -103,14 +103,14 @@ module.exports = {
         } else { cb(new Error('Incorrect Username')); }
     },
     updateDisplayPicture: async (request, cb) => {
-        let upload = loadMulter.single('dp');
+        let upload = loadMulter(5,'dp').single('dp');
         await upload(request, null, (err) => {
             if (err)
                 cb(err);
             else {
                 User
                     .findByIdAndUpdate(request.verifiedToken._id, {
-                        dp: request.file.filename
+                        dp: request.file.key
                     }, { new: true })
                     .exec((err, result) => {
                         cb(err, result);

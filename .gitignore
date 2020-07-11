@@ -5,3 +5,4 @@ package-lock.json
 resource/
 config.js
 docs/
+global.constant.js

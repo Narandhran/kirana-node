@@ -45,11 +45,6 @@ var shopSchema = new Schema({
         type: Boolean,
         default: true
     },
-    banner: {
-        type: [String],
-        required: false,
-        default: []
-    },
     deliveryFee: {
         type: Number,
         required: false,
@@ -58,7 +53,8 @@ var shopSchema = new Schema({
     promo: {
         code: { type: String, maxlength: 8 },
         value: { type: Number, max: 999 },
-        exp: { type: Date }
+        exp: { type: Date },
+        flag: { type: Boolean, default: false }
     }
 }, { timestamps: true });
 

@@ -143,5 +143,13 @@ module.exports = {
             } else
                 cb(null, 'Promo code is not valid!');
         } else cb(null, 'Promo expired, try new code!');
+    },
+    updateDeliveryStatus: async (request, cb) => {
+        let { status } = request.body;
+        await Order
+            .findByIdAndUpdate(request.params.id, { 'trackingStatus': status })
+            .exec((err, result) => {
+                cb(err, result);
+            });
     }
 };
