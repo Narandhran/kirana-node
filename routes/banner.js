@@ -6,7 +6,7 @@ module.exports = app => {
      * Admin only
      */
     app.post('/banner/create/:id', VendorAndAdmin, bannerCtl.create);
-    app.put('/banner/update/:id', VendorAndAdmin, bannerCtl.updateBanner);
+    app.put('/banner/update', VendorAndAdmin, bannerCtl.updateBanner);
 
     /**
      * All users

@@ -1,5 +1,6 @@
-const { findShopNearBy, requestToAddShop, viewShopsByStatus, viewMyShops, shopFilter, createOrUpdateBanner
-    , respondToAddShop, updateDetails, deleteShopById, makeUnavailable, getBannersByShopId,generatePromo } = require('../services/shop');
+const { findShopNearBy, requestToAddShop, viewShopsByStatus, viewMyShops, shopFilter, updateThumb,
+    respondToAddShop, updateDetails, deleteShopById, makeUnavailable, generatePromo
+} = require('../services/shop');
 const { successHandler, errorHandler } = require('../utils/handler');
 module.exports = {
     /**
@@ -80,20 +81,14 @@ module.exports = {
             else successHandler(req, res, 'Success', result);
         });
     },
-    createOrUpdateBanner: (req, res) => {
-        createOrUpdateBanner(req, (err, result) => {
-            if (err) errorHandler(req, res, err);
-            else successHandler(req, res, 'Success', result);
-        });
-    },
-    getBannersByShopId: (req, res) => {
-        getBannersByShopId(req, (err, result) => {
-            if (err) errorHandler(req, res, err);
-            else successHandler(req, res, 'Success', result);
-        });
-    },
     generatePromo: (req, res) => {
         generatePromo(req, (err, result) => {
+            if (err) errorHandler(req, res, err);
+            else successHandler(req, res, 'Success', result);
+        });
+    },
+    updateThumb: (req, res) => {
+        updateThumb(req, (err, result) => {
             if (err) errorHandler(req, res, err);
             else successHandler(req, res, 'Success', result);
         });
