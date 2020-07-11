@@ -7,6 +7,7 @@ const { loadMulter } = require('./custom/multers3.service');
 const { onlyNumber, autoIdGen, alphaNumeric } = require('../utils/autogen');
 const { addTime } = require('../utils/date.util');
 const { request } = require('express');
+const constant = require('../utils/global.constant');
 const axios = require('axios').default;
 const moment = require('moment');
 const config = require('../config')[process.env.NODE_ENV];
@@ -68,7 +69,7 @@ module.exports = {
                             role: isUser.role,
                             fullname: isUser.fullname
                         });
-                        cb(null, { role: isUser.role, token, rpath: config.GET_RESOURCE_BASE_PATH });
+                        cb(null, { role: isUser.role, token, rpath: constant.s3.basePath });
                     } catch (e) { cb(e, {}); };
                 } else cb(new Error('OTP invalid, try again!'), {});
             } else cb(new Error('OTP expired'));
@@ -97,13 +98,13 @@ module.exports = {
                         role: isUser.role,
                         fullname: isUser.fullname
                     });
-                    cb(null, { token: token, role: isUser.role, rPath: config.GET_RESOURCE_BASE_PATH });
+                    cb(null, { token: token, role: isUser.role, rPath: constant.s3.basePath });
                 } catch (e) { cb(e); };
             } else { cb(new Error('Incorrect Password')); }
         } else { cb(new Error('Incorrect Username')); }
     },
     updateDisplayPicture: async (request, cb) => {
-        let upload = loadMulter(5,'dp').single('dp');
+        let upload = loadMulter(5, 'dp').single('dp');
         await upload(request, null, (err) => {
             if (err)
                 cb(err);
