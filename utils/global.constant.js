@@ -4,7 +4,7 @@ module.exports = {
     },
     uri: {},
     aws: {
-        secretAccessKey: '/WGLDzMKnsdB/VY1n9dsqmGGOMllZg5kqOsafefBH/',
+        secretAccessKey: 'WGLDzMKnsdB/VY1n9dsqmGGOMllZg5kqOsafefBH',
         accessKeyId: 'AKIAIB3L7KCCYRF2ZN6A',
         region: 'ap-south-1'
     },

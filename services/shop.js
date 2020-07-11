@@ -17,6 +17,7 @@ module.exports = {
             else {
                 let persisted = JSON.parse(request.body.textField);
                 persisted.vendor_id = request.verifiedToken._id;
+                console.log(request.file);
                 persisted.picture = request.file.key;
                 if (persisted.deliverySlot.slot == 'Morning') persisted.deliverySlot.time = '07:00 to 10:00';
                 else if (persisted.deliverySlot.slot == 'Afternoon') persisted.deliverySlot.time = '12:00 to 01:30';
