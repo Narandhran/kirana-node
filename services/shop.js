@@ -18,7 +18,7 @@ module.exports = {
                 let persisted = JSON.parse(request.body.textField);
                 persisted.vendor_id = request.verifiedToken._id;
                 console.log(request.file);
-                persisted.picture = request.file.key;                Shop.create(persisted, (err, result) => {
+                persisted.picture = request.file.key; Shop.create(persisted, (err, result) => {
                     cb(err, result);
                 });
             }
@@ -150,5 +150,12 @@ module.exports = {
     },
     generatePromo: async (request, cb) => {
         cb(null, autoIdGen(8, alphaNumeric).toUpperCase());
+    },
+    updateDeliverySlot: async (request, cb) => {
+        Shop.findOneAndUpdate({ '_id': request.query.shopId, 'deliverySlot._id': request.query.slotId },
+            { '$set': { 'deliverySlot.$.flag': request.body.flag } }, { new: true })
+            .exec((err, result) => {
+                cb(err, result);
+            });
     }
 };

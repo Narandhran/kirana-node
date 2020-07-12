@@ -1,5 +1,5 @@
 const { findShopNearBy, requestToAddShop, viewShopsByStatus, viewMyShops, shopFilter, updateThumb,
-    respondToAddShop, updateDetails, deleteShopById, makeUnavailable, generatePromo
+    respondToAddShop, updateDetails, deleteShopById, makeUnavailable, generatePromo, updateDeliverySlot
 } = require('../services/shop');
 const { successHandler, errorHandler } = require('../utils/handler');
 module.exports = {
@@ -89,6 +89,12 @@ module.exports = {
     },
     updateThumb: (req, res) => {
         updateThumb(req, (err, result) => {
+            if (err) errorHandler(req, res, err);
+            else successHandler(req, res, 'Success', result);
+        });
+    },
+    updateDeliverySlot: (req, res) => {
+        updateDeliverySlot(req, (err, result) => {
             if (err) errorHandler(req, res, err);
             else successHandler(req, res, 'Success', result);
         });

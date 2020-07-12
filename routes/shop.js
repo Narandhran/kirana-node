@@ -6,6 +6,9 @@ module.exports = app => {
     app.get('/shop/list/:status', AdminOnly, shopCtrl.viewShopsByStatus);
     app.put('/shop/update_thumb/:id', VendorAndAdmin, shopCtrl.updateThumb);
 
+    /** Vendor and Admin */
+    app.put('/shop/update_delivery_slot',VendorAndAdmin,shopCtrl.updateDeliverySlot);
+
     /** Vendor */
     app.post('/shop/request_to_create', VendorOnly, shopCtrl.requestToAddShop);
     app.put('/shop/update_details/:id', VendorOnly, shopCtrl.updateDetails);
