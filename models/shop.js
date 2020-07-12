@@ -56,12 +56,10 @@ var shopSchema = new Schema({
         default: 0
     },
     deliverySlot: {
-        slots: {
-            type: [slotSchema],
-            default: [{ slot: 'Morning', time: '07:00 to 10:00' },
-            { slot: 'Afternoon', time: '12:00 to 02:00' },
-            { slot: 'Evening', time: '05:00 to 07:30' }]
-        }
+        type: [slotSchema],
+        default: [{ slot: 'Morning', time: '07:00 to 10:00' },
+        { slot: 'Afternoon', time: '12:00 to 02:00' },
+        { slot: 'Evening', time: '05:00 to 07:30' }]
     },
     promo: {
         code: { type: String, maxlength: 8 },
