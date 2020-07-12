@@ -6,10 +6,13 @@ const { generateTemplate, transporter } = require('./custom/mailer.service');
 const { generatePdf } = require('./custom/pdf.service');
 const { createOrder, verify } = require('./custom/razorpay.service');
 const moment = require('moment');
+const config = require('../config')[process.env.NODE_ENV];
+const axios = require('axios').default;
+
 module.exports = {
     placeOrder: async (request, cb) => {
-        let orderObj = request.body;
-        let isUser = User.findById(request.verifiedToken._id);
+        var orderObj = request.body;
+        let isUser = await User.findById(request.verifiedToken._id).lean();
         orderObj.receipt = autoIdGen(8, alphaNumeric);
         orderObj.orderId = autoIdGen(8, onlyNumber);
         orderObj.user_id = request.verifiedToken._id;
@@ -28,24 +31,27 @@ module.exports = {
             persisted.trackingStatus = 'Processing';
             await Order.create(orderObj, async (err, result) => {
                 let mailOption = await generateTemplate({
-                    fullname: isUser.fullname,
-                    orderId: result.orderId,
-                    subTotal: result.subTotal,
-                    deliveryFee: result.deliveryFee,
-                    discount: result.discount,
-                    total: result.amount
+                    fullname: `${isUser.fname} ${isUser.lname}`,
+                    orderId: persisted.orderId,
+                    subTotal: persisted.subTotal,
+                    deliveryFee: persisted.deliveryFee,
+                    discount: persisted.discount,
+                    total: persisted.amount
                 }, 'order/orderConfirm.html');
                 Promise.all([
-                    await axios.get(config.smsGateWay.uri(isUser.phone, `Hi ${isUser.fullname}, your order has been placed successfully. Kindly note the order reference number ${persisted.orderId} for further communication. Have a great day, Team SignVision.`)),
+                    await axios.get(config.smsGateWay.uri(9489770129, 'Hi , your order has been placed successfully. Kindly note the order reference number orderId for further communication. Have a great day, Team SignVision.')),
                     await transporter.sendMail({
                         from: '"no-reply@get2basket.com" <Signvisionsolutionpvt@gmail.com>',
                         to: isUser.username,
-                        subject: subject,
+                        subject: 'Order confirmed',
                         html: mailOption
                     })
                 ]).then(result => {
                     cb(err, result);
-                }).catch(e => { cb(e, {}); });
+                }).catch(error => {
+                    console.log(true);
+                    cb(error, {});
+                });
             });
         }
     },

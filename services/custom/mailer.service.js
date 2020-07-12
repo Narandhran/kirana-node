@@ -22,10 +22,10 @@ var transporter = createTransport({
 transporter.use('compile', inlineCss());
 
 
-var generateTemplate = (templateData, file) => {
+var generateTemplate = async (templateData, file) => {
     let data = { ...templateData, ...templateUtil };
-    var source = fs.readFileSync(path.resolve('utils/template/' + file), 'utf8');
-    var template = Handlebars.compile(source);
+    var source = await fs.readFileSync(path.resolve('utils/template/' + file), 'utf8');
+    var template = await Handlebars.compile(source);
     return template(data);
 };
 

@@ -2,8 +2,7 @@ const { model, Schema } = require('mongoose');
 
 var orderSchema = new Schema({
     id: {
-        type: String,
-        unique: true
+        type: String
     },
     orderId: {
         type: Number,
