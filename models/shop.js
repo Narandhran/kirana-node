@@ -2,6 +2,11 @@ const { model, Schema } = require('mongoose');
 const { paths } = require('../utils/global.constant');
 var uniqueValidator = require('mongoose-unique-validator');
 
+var slotSchema = new Schema({
+    slot: String,
+    time: String
+}, { timestamps: false });
+
 var shopSchema = new Schema({
     vendor_id: {
         type: Schema.Types.ObjectId,
@@ -51,13 +56,11 @@ var shopSchema = new Schema({
         default: 0
     },
     deliverySlot: {
-        slot: {
-            type: String,
-            enum: ['Morning', 'Afternoon', 'Evening'],
-            required: true
-        },
-        time: {
-            type: String
+        slots: {
+            type: [slotSchema],
+            default: [{ slot: 'Morning', time: '07:00 to 10:00' },
+            { slot: 'Afternoon', time: '12:00 to 02:00' },
+            { slot: 'Evening', time: '05:00 to 07:30' }]
         }
     },
     promo: {
