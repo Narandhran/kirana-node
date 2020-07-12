@@ -4,7 +4,8 @@ var uniqueValidator = require('mongoose-unique-validator');
 
 var slotSchema = new Schema({
     slot: String,
-    time: String
+    time: String,
+    flag: Boolean
 }, { timestamps: false });
 
 var shopSchema = new Schema({
@@ -57,9 +58,9 @@ var shopSchema = new Schema({
     },
     deliverySlot: {
         type: [slotSchema],
-        default: [{ slot: 'Morning', time: '07:00 to 10:00' },
-        { slot: 'Afternoon', time: '12:00 to 02:00' },
-        { slot: 'Evening', time: '05:00 to 07:30' }]
+        default: [{ slot: 'Morning', time: '07:00 to 10:00', flag: true },
+        { slot: 'Afternoon', time: '12:00 to 02:00', flag: true },
+        { slot: 'Evening', time: '05:00 to 07:30', flag: true }]
     },
     promo: {
         code: { type: String, maxlength: 8 },
