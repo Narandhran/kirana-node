@@ -11,8 +11,8 @@ const axios = require('axios').default;
 
 module.exports = {
     placeOrder: async (request, cb) => {
-        var orderObj = request.body;
-        let isUser = await User.findById(request.verifiedToken._id).lean();
+        var orderObj = { ...request.body };
+        let isUser = await User.findById(request.verifiedToken._id);
         orderObj.receipt = autoIdGen(8, alphaNumeric);
         orderObj.orderId = autoIdGen(8, onlyNumber);
         orderObj.user_id = request.verifiedToken._id;
@@ -27,38 +27,40 @@ module.exports = {
                 }
             });
         } else {
-            let persisted = orderObj;
-            persisted.trackingStatus = 'Processing';
+            orderObj.trackingStatus = 'Processing';
             await Order.create(orderObj, async (err, result) => {
-                let mailOption = await generateTemplate({
-                    fullname: `${isUser.fname} ${isUser.lname}`,
-                    orderId: persisted.orderId,
-                    subTotal: persisted.subTotal,
-                    deliveryFee: persisted.deliveryFee,
-                    discount: persisted.discount,
-                    total: persisted.amount
-                }, 'order/orderConfirm.html');
-                Promise.all([
-                    await axios.get(config.smsGateWay.uri(9489770129, 'Hi , your order has been placed successfully. Kindly note the order reference number orderId for further communication. Have a great day, Team SignVision.')),
-                    await transporter.sendMail({
-                        from: '"no-reply@get2basket.com" <Signvisionsolutionpvt@gmail.com>',
-                        to: isUser.username,
-                        subject: 'Order confirmed',
-                        html: mailOption
-                    })
-                ]).then(result => {
-                    cb(err, result);
-                }).catch(error => {
-                    console.log(true);
-                    cb(error, {});
-                });
+                if (err) cb(new Error('Error while placing order', {}));
+                else {
+                    let mailOption = await generateTemplate({
+                        fullname: isUser.fullname,
+                        orderId: orderObj.orderId,
+                        subTotal: orderObj.subTotal,
+                        deliveryFee: orderObj.deliveryFee,
+                        discount: orderObj.discount,
+                        total: orderObj.amount
+                    }, 'order/orderConfirm.html');
+                    Promise.all([
+                        await axios.get(config.smsGateWay.uri(isUser.phone, `Hi ${isUser.fullname}, your order has been placed successfully. Kindly note the order reference number ${orderObj.orderId} for further communication. Have a great day, Team SignVision.`)),
+                        await transporter.sendMail({
+                            from: '"no-reply@get2basket.com" <Signvisionsolutionpvt@gmail.com>',
+                            to: isUser.username,
+                            subject: 'Order confirmed',
+                            html: mailOption
+                        })
+                    ]).then(result => {
+                        cb(null, 'Order placed successfully');
+                    }).catch(error => {
+                        cb(error, {});
+                    });
+                }
+
             });
         }
     },
     paymentVerification: async (request, cb) => {
         let { razorpay_order_id, razorpay_payment_id, razorpay_signature } = request.body;
-        let isVerified = verify(razorpay_order_id, razorpay_payment_id, razorpay_signature);
-        let isUser = User.findById(request.verifiedToken._id);
+        let isVerified = await verify(razorpay_order_id, razorpay_payment_id, razorpay_signature);
+        let isUser = await User.findById(request.verifiedToken._id);
         if (isVerified) {
             await Order
                 .findOneAndUpdate({
@@ -68,6 +70,7 @@ module.exports = {
                     'trackingStatus': 'Processing'
                 }, { new: true })
                 .exec(async (err, result) => {
+                    console.log(JSON.stringify(result));
                     let mailOption = await generateTemplate({
                         fullname: isUser.fullname,
                         orderId: result.orderId,
@@ -77,7 +80,7 @@ module.exports = {
                         total: result.amount
                     }, 'order/orderConfirm.html');
                     Promise.all([
-                        await axios.get(config.smsGateWay.uri(isUser.phone, `Hi ${isUser.fullname}, your order has been placed successfully. Kindly note the order reference number ${persisted.id} for further communication. Have a great day, Team SignVision.`)),
+                        await axios.get(config.smsGateWay.uri(isUser.phone, `Hi ${isUser.fullname}, your order has been placed successfully. Kindly note the order reference number ${result.id} for further communication. Have a great day, Team SignVision.`)),
                         await transporter.sendMail({
                             from: '"no-reply@get2basket.com" <Signvisionsolutionpvt@gmail.com>',
                             to: isUser.username,
@@ -85,7 +88,7 @@ module.exports = {
                             html: mailOption
                         })
                     ]).then(result => {
-                        cb(err, result);
+                        cb(null, 'Order placed successfully');
                     }).catch(e => { cb(e, {}); });
                 });
         }
@@ -138,14 +141,14 @@ module.exports = {
             });
     },
     applyPromo: async (request, cb) => {
-        let { promoCode, subTotal, deliveryFee, discount = 0, total = 0, exp } = request.body;
-        let isShop = await Shop.findById(request.params.id);
+        let { promoCode, subTotal } = request.body;
+        let isShop = await Shop.findById(request.params.id).lean();
+        let discount = 0, total = 0;
         if (isShop.promo.exp >= new Date()) {
             if (isShop.promo.code == promoCode) {
                 discount = isShop.promo.value;
                 total = subTotal + isShop.deliveryFee - discount;
-                deliveryFee = isShop.deliveryFee;
-                cb(null, { discount, deliveryFee, subTotal, total });
+                cb(null, { subTotal, deliveryFee: isShop.deliveryFee, discount, total });
             } else
                 cb(null, 'Promo code is not valid!');
         } else cb(null, 'Promo expired, try new code!');
