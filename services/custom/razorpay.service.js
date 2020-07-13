@@ -21,7 +21,7 @@ module.exports.createOrder = async (options, cb) => {
 
 module.exports.verify = async (orderId, paymentId, signature) => {
     var generatedSignature = await crypto
-        .createHmac('SHA256', key_secret)
+        .createHmac('SHA256', 'bB3wHTL8DXttQBi9euS2AQFD')
         .update(orderId + '|' + paymentId)
         .digest('hex');
     return (generatedSignature == signature);
