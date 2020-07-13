@@ -80,11 +80,11 @@ module.exports = {
                         total: result.amount
                     }, 'order/orderConfirm.html');
                     Promise.all([
-                        await axios.get(config.smsGateWay.uri(isUser.phone, `Hi ${isUser.fullname}, your order has been placed successfully. Kindly note the order reference number ${result.id} for further communication. Have a great day, Team SignVision.`)),
+                        await axios.get(config.smsGateWay.uri(isUser.phone, `Hi ${isUser.fullname}, your order has been placed successfully. Kindly note the order reference number ${result.orderId} for further communication. Have a great day, Team SignVision.`)),
                         await transporter.sendMail({
                             from: '"no-reply@get2basket.com" <Signvisionsolutionpvt@gmail.com>',
                             to: isUser.username,
-                            subject: subject,
+                            subject: 'Order confirmed',
                             html: mailOption
                         })
                     ]).then(result => {

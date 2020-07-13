@@ -1,8 +1,9 @@
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
+const {key_id,key_secret} = require('../../utils/global.constant').razorPay;
 var instance = new Razorpay({
-    key_id: 'rzp_test_m0hjWTJAGI5LlD',
-    key_secret: 'bB3wHTL8DXttQBi9euS2AQFD'
+    key_id: key_id,
+    key_secret: key_secret
 });
 
 
@@ -21,7 +22,7 @@ module.exports.createOrder = async (options, cb) => {
 
 module.exports.verify = async (orderId, paymentId, signature) => {
     var generatedSignature = await crypto
-        .createHmac('SHA256', 'bB3wHTL8DXttQBi9euS2AQFD')
+        .createHmac('SHA256', key_secret)
         .update(orderId + '|' + paymentId)
         .digest('hex');
     return (generatedSignature == signature);

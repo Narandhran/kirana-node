@@ -15,5 +15,9 @@ module.exports = {
         salt: 10,
         expiration: '365d',
         algorithm: 'RS256'
+    },
+    razorPay: {
+        key_id: 'rzp_test_m0hjWTJAGI5LlD',
+        key_secret: 'bB3wHTL8DXttQBi9euS2AQFD'
     }
 };
