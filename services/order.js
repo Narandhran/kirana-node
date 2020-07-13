@@ -22,7 +22,6 @@ module.exports = {
                 else {
                     let persisted = { ...orderObj, ...result };
                     await Order.create(persisted, async (err, result) => {
-                        console.log(JSON.stringify(result));
                         cb(err, result);
                     });
                 }
@@ -49,9 +48,9 @@ module.exports = {
                             html: mailOption
                         })
                     ]).then(result => {
-                        cb(null, result);
+                        cb(null, );
                     }).catch(error => {
-                        cb(error, {});
+                        cb(error, 'Order placed successfully');
                     });
                 }
 
