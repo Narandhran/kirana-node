@@ -98,6 +98,7 @@ module.exports = {
         Order
             .find({ user_id: request.verifiedToken._id })
             .populate({ path: 'shop_id', select: 'name picture' })
+            .populate({path: 'shipmentDetails'})
             .sort({ 'createdAt': -1 })
             .exec((err, result) => {
                 cb(err, result);
@@ -135,6 +136,7 @@ module.exports = {
         let shops = await Shop.find({ 'vendor_id': request.verifiedToken._id });
         await Order
             .find({ 'shop_id': { $in: shops }, ...query })
+            .populate({path: 'shipmentDetails'})
             .sort({ 'createdAt': -1 })
             .exec((err, result) => {
                 cb(err, result);
@@ -154,9 +156,9 @@ module.exports = {
         } else cb(null, 'Promo expired, try new code!');
     },
     updateDeliveryStatus: async (request, cb) => {
-        let { status } = request.body;
+        let { status, isPaymentSuccess = false } = request.body;
         await Order
-            .findByIdAndUpdate(request.params.id, { 'trackingStatus': status })
+            .findByIdAndUpdate(request.params.id, { 'trackingStatus': status, 'isPaymentSuccess': isPaymentSuccess })
             .exec((err, result) => {
                 cb(err, result);
             });

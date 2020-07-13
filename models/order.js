@@ -70,10 +70,8 @@ var orderSchema = new Schema({
         howMany: { type: Number, default: 1 }
     }],
     shipmentDetails: {
-        name: { type: String, minlength: 3, maxlength: 36 },
-        address: { type: String, minlength: 5, maxlength: 100 },
-        mobile: { type: String, minlength: 10, maxlength: 10 },
-        landmark: { type: String }
+        type: Schema.Types.ObjectId,
+        ref: 'address_book'
     },
     deliverySlot: {
         slot: {
