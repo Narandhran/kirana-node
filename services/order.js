@@ -22,6 +22,7 @@ module.exports = {
                 else {
                     let persisted = { ...orderObj, ...result };
                     await Order.create(persisted, async (err, result) => {
+                        console.log(JSON.stringify(result));
                         cb(err, result);
                     });
                 }
@@ -48,7 +49,7 @@ module.exports = {
                             html: mailOption
                         })
                     ]).then(result => {
-                        cb(null, 'Order placed successfully');
+                        cb(null, result);
                     }).catch(error => {
                         cb(error, {});
                     });
@@ -98,7 +99,7 @@ module.exports = {
         Order
             .find({ user_id: request.verifiedToken._id })
             .populate({ path: 'shop_id', select: 'name picture' })
-            .populate({path: 'shipmentDetails'})
+            .populate({ path: 'shipmentDetails' })
             .sort({ 'createdAt': -1 })
             .exec((err, result) => {
                 cb(err, result);
@@ -136,7 +137,7 @@ module.exports = {
         let shops = await Shop.find({ 'vendor_id': request.verifiedToken._id });
         await Order
             .find({ 'shop_id': { $in: shops }, ...query })
-            .populate({path: 'shipmentDetails'})
+            .populate({ path: 'shipmentDetails' })
             .sort({ 'createdAt': -1 })
             .exec((err, result) => {
                 cb(err, result);
