@@ -136,6 +136,7 @@ module.exports = {
         let shops = await Shop.find({ 'vendor_id': request.verifiedToken._id });
         await Order
             .find({ 'shop_id': { $in: shops }, ...query })
+            .populate({ path: 'shop_id', select: 'name picture' })
             .populate({ path: 'shipmentDetails' })
             .sort({ 'createdAt': -1 })
             .exec((err, result) => {
