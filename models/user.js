@@ -30,7 +30,7 @@ var userSchema = new Schema({
     },
     dp: {
         type: String,
-        default: undefined
+        default: null
     },
     fcm: {
         type: [String],
