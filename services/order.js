@@ -1,6 +1,7 @@
 const { Order } = require('../models/order');
 const { Shop } = require('../models/shop');
 const { User } = require('../models/user');
+const { Cart } = require('../models/cart');
 const { alphaNumeric, autoIdGen, onlyNumber } = require('../utils/autogen');
 const { generateTemplate, transporter } = require('./custom/mailer.service');
 const { generatePdf } = require('./custom/pdf.service');
@@ -47,10 +48,11 @@ module.exports = {
                             subject: 'Order confirmed',
                             html: mailOption
                         })
-                    ]).then(result => {
-                        cb(null, );
+                    ]).then(async (result) => {
+                        await Cart.findOneAndRemove({ 'user_id': request.verifiedToken._id });
+                        cb(null, 'Order placed successfully');
                     }).catch(error => {
-                        cb(error, 'Order placed successfully');
+                        cb(error, {});
                     });
                 }
 
@@ -87,9 +89,10 @@ module.exports = {
                             subject: 'Order confirmed',
                             html: mailOption
                         })
-                    ]).then(result => {
+                    ]).then(async (result) => {
+                        await Cart.findOneAndRemove({ 'user_id': request.verifiedToken._id });
                         cb(null, 'Order placed successfully');
-                    }).catch(e => { cb(e, {}); });
+                    }).catch(error => { cb(error, {}); });
                 });
         }
         else cb(new Error('Payment verification failed', {}));
