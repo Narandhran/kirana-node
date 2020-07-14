@@ -43,6 +43,9 @@ var orderSchema = new Schema({
     subTotal: {
         type: Number
     },
+    total: {
+        type: Number
+    },
     tax: {
         type: Number
     },

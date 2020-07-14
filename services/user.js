@@ -69,7 +69,7 @@ module.exports = {
                             role: isUser.role,
                             fullname: isUser.fullname
                         });
-                        cb(null, { role: isUser.role, token, rpath: constant.s3.basePath });
+                        cb(null, { role: isUser.role, token, rPath: constant.s3.basePath });
                     } catch (e) { cb(e, {}); };
                 } else cb(new Error('OTP invalid, try again!'), {});
             } else cb(new Error('OTP expired'));
@@ -148,7 +148,7 @@ module.exports = {
             isUser.verify.otp = otp;
             isUser.verify.expireTime = addTime({ min: 10 });
             await isUser.save();
-            let mailOption = await generateTemplate({ fullname: `${isUser.fname} ${isUser.lname}`, otp: otp, message: 'reset your password' }, 'registration/sendOtp.html');
+            let mailOption = await generateTemplate({ fullname: `${isUser.fname} ${isUser.lname}`, otp: otp, message: subject }, 'registration/sendOtp.html');
             Promise.all([
                 await axios.get(config.smsGateWay.uri(isUser.phone, `Hi ${isUser.fullname}, your OTP is ${otp} will expire in another 15 mins. Kindly use this for login, don't share it with anyone. Have a great day, Team SignVision.`)),
                 await transporter.sendMail({
