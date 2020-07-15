@@ -1,5 +1,5 @@
-const { findOrderByUser, placeOrder, getInvoice, paymentVerification,updateDeliveryStatus,
-    findOrdersByVendor, viewOrdersByVendor,applyPromo } = require('../services/order');
+const { findOrderByUser, placeOrder, getInvoice, paymentVerification, updateDeliveryStatus,
+    findOrdersByVendor, viewOrdersByVendor, applyPromo, orderFilter } = require('../services/order');
 const { successHandler, errorHandler } = require('../utils/handler');
 module.exports = {
     placeOrder: (req, res) => {
@@ -27,22 +27,28 @@ module.exports = {
             else successHandler(req, res, 'Invoice generated successfully', result);
         });
     },
-    findOrdersByVendor:(req, res) => {
+    findOrdersByVendor: (req, res) => {
         findOrdersByVendor(req, (err, result) => {
             if (err) errorHandler(req, res, err);
             else successHandler(req, res, 'Order(s) listed successfully', result);
         });
     },
-    applyPromo:(req, res) => {
+    applyPromo: (req, res) => {
         applyPromo(req, (err, result) => {
             if (err) errorHandler(req, res, err);
             else successHandler(req, res, 'Applied successfully', result);
         });
     },
-    updateDeliveryStatus:(req, res) => {
+    updateDeliveryStatus: (req, res) => {
         updateDeliveryStatus(req, (err, result) => {
             if (err) errorHandler(req, res, err);
             else successHandler(req, res, 'Updated successfully', result);
+        });
+    },
+    orderFilter: (req, res) => {
+        orderFilter(req, (err, result) => {
+            if (err) errorHandler(req, res, err);
+            else successHandler(req, res, 'Success', result);
         });
     }
 };

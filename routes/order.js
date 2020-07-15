@@ -1,7 +1,11 @@
 const orderCtrl = require('../controller/order');
-const { AdminOnly, AllUsers, VendorOnly } = require('../utils/auth.util');
+const { AdminOnly, AllUsers, VendorOnly, VendorAndAdmin } = require('../utils/auth.util');
 
 module.exports = app => {
+
+    /** Both Admin and Vendor */
+    app.put('/order/find_by_id/:id', VendorAndAdmin, orderCtrl.orderFilter);
+
     /**
      * All Users
      */
@@ -15,5 +19,5 @@ module.exports = app => {
      * Vendor
      */
     app.get('/order/view/:status', VendorOnly, orderCtrl.findOrdersByVendor);
-    app.put('/order/update_delivery_status/:id',VendorOnly,orderCtrl.updateDeliveryStatus);
+    app.put('/order/update_delivery_status/:id', VendorOnly, orderCtrl.updateDeliveryStatus);
 };

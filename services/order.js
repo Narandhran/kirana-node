@@ -132,6 +132,13 @@ module.exports = {
         else
             cb(new Error('Invoice is only for successful delivery of any order'), {});
     },
+    orderFilter: async (request, cb) => {
+        Order
+            .findOne({ 'orderId': request.params._id })
+            .exec((err, result) => {
+                cb(err, result);
+            });
+    },
     findOrdersByVendor: async (request, cb) => {
         let { status = 'ALL' } = request.params;
         let query = {};

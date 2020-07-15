@@ -19,9 +19,11 @@ module.exports = {
         var document = {
             html: fs.readFileSync(path.resolve(template), 'utf8'),
             data: doc.data,
-            path: `${config.POST_RESOURCE_BASE_PATH}${doc.outputPath}${Date.now()}.pdf`
+            path: `${config.POST_RESOURCE_BASE_PATH}${doc.outputPath}.pdf`
         };
         pdf.create(document, options).then(result => {
+            console.log('fname: ' + result.filename);
+            console.log('opath: ' + doc.outputPath);
             result = result.filename
                 ? `${config.GET_RESOURCE_BASE_PATH}invoice/${(result.filename).substring((result.filename).lastIndexOf('/') + 1)}`
                 : 'not found';
