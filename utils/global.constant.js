@@ -17,7 +17,7 @@ module.exports = {
         algorithm: 'RS256'
     },
     razorPay: {
-        key_id: 'rzp_test_m0hjWTJAGI5LlD',
-        key_secret: 'bB3wHTL8DXttQBi9euS2AQFD'
+        key_id: 'rzp_live_8XnsF5GRdFes6y',
+        key_secret: 'l00s7869aqEU7B2yIaKcljjT'
     }
 };

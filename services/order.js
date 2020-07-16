@@ -38,7 +38,7 @@ module.exports = {
                         subTotal: orderObj.subTotal,
                         deliveryFee: orderObj.deliveryFee,
                         discount: orderObj.discount,
-                        total: orderObj.amount
+                        total: orderObj.total
                     }, 'order/orderConfirm.html');
                     Promise.all([
                         await axios.get(config.smsGateWay.uri(isUser.phone, `Hi ${isUser.fullname}, your order has been placed successfully. Kindly note the order reference number ${orderObj.orderId} for further communication. Have a great day, Team SignVision.`)),
@@ -79,7 +79,7 @@ module.exports = {
                         subTotal: result.subTotal,
                         deliveryFee: result.deliveryFee,
                         discount: result.discount,
-                        total: result.amount
+                        total: result.total
                     }, 'order/orderConfirm.html');
                     Promise.all([
                         await axios.get(config.smsGateWay.uri(isUser.phone, `Hi ${isUser.fullname}, your order has been placed successfully. Kindly note the order reference number ${result.orderId} for further communication. Have a great day, Team SignVision.`)),
@@ -134,7 +134,9 @@ module.exports = {
     },
     orderFilter: async (request, cb) => {
         Order
-            .findOne({ 'orderId': request.params._id })
+            .find({ orderId: { $regex: request.params.id, $options: 'i' } })
+            .populate({ path: 'shop_id', select: 'name picture' })
+            .populate({ path: 'shipmentDetails' })
             .exec((err, result) => {
                 cb(err, result);
             });
