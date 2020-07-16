@@ -4,7 +4,7 @@ const { AdminOnly, AllUsers, VendorOnly, VendorAndAdmin } = require('../utils/au
 module.exports = app => {
 
     /** Both Admin and Vendor */
-    app.put('/order/find_by_id/:id', VendorAndAdmin, orderCtrl.orderFilter);
+    app.get('/order/find_by_id/:id', VendorAndAdmin, orderCtrl.orderFilter);
 
     /**
      * All Users

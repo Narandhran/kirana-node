@@ -134,7 +134,7 @@ module.exports = {
     },
     orderFilter: async (request, cb) => {
         Order
-            .find({ orderId: { $regex: request.params.id, $options: 'i' } })
+            .find({ '$where': `this.orderId.toString().match(${request.params.id})` })
             .populate({ path: 'shop_id', select: 'name picture' })
             .populate({ path: 'shipmentDetails' })
             .exec((err, result) => {
