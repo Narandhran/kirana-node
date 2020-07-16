@@ -23,7 +23,7 @@ module.exports = {
                 else {
                     let persisted = { ...orderObj, ...result };
                     await Order.create(persisted, async (err, result) => {
-                        cb(err, result);
+                        cb(err, { id: result.id, amount: result.amount });
                     });
                 }
             });
