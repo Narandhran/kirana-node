@@ -12,7 +12,7 @@ module.exports = {
         POST_RESOURCE_BASE_PATH: '/var/www/html/kirana-resources/',
         smsGateWay: {
             uri: (mobile, message) => {
-                return `http://login.bulksmsgateway.in/sendmessage.php?user=Prasanna2020&password=prasanna@100&mobile=${mobile}&message=${message}&sender=SWADHA&type=3`;
+                return `http://smsweb.smsleases.com/app/smsapi/index.php?key=25EE0CAE8A3760&campaign=0&routeid=9&type=text&contacts=${mobile}&senderid=SMSSPT&msg=${message}`;
             }
         },
     },
@@ -25,7 +25,7 @@ module.exports = {
         POST_RESOURCE_BASE_PATH: '/var/www/html/kirana-resources/',
         smsGateWay: {
             uri: (mobile, message) => {
-                return `http://login.bulksmsgateway.in/sendmessage.php?user=Prasanna2020&password=prasanna@100&mobile=${mobile}&message=${message}&sender=SWADHA&type=3`;
+                return `http://smsweb.smsleases.com/app/smsapi/index.php?key=25EE0CAE8A3760&campaign=0&routeid=9&type=text&contacts=${mobile}&senderid=SMSSPT&msg=${message}`;
             }
         }
     },
