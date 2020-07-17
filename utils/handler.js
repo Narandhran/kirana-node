@@ -75,6 +75,10 @@ module.exports = {
                 response.status(400);
                 errorResponse = wrapError(request, 400, error.message, 'Multipart Error(Multer)');
                 break;
+            case 'PromoInvalid':
+                response.status(415);
+                errorResponse = wrapError(request, 415, error.message, 'Promo Invali Error');
+                break;
             default:
                 response.status(400);
                 errorResponse = wrapError(request, 400, error.message, error.name);

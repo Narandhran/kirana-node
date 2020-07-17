@@ -164,8 +164,12 @@ module.exports = {
                 discount = isShop.promo.value;
                 total = subTotal + isShop.deliveryFee - discount;
                 cb(null, { subTotal, deliveryFee: isShop.deliveryFee, discount, total });
-            } else
-                cb(null, 'Promo code is not valid!');
+            } else {
+                let e = new Error();
+                e.name = 'PromoInvalid';
+                e.message = 'PromoInvalid';
+                cb(e, 'Promo code is not valid!');
+            }
         } else cb(null, 'Promo expired, try new code!');
     },
     updateDeliveryStatus: async (request, cb) => {
