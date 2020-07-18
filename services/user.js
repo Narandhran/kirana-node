@@ -149,17 +149,16 @@ module.exports = {
             isUser.verify.expireTime = addTime({ min: 10 });
             await isUser.save();
             let mailOption = await generateTemplate({ fullname: `${isUser.fname} ${isUser.lname}`, otp: otp, message: subject }, 'registration/sendOtp.html');
-            Promise.all([
-                await axios.get(config.smsGateWay.uri(isUser.phone, `Hi ${isUser.fullname}, your OTP is ${otp} will expire in another 15 mins. Kindly use this for login, don't share it with anyone. Have a great day, Team SignVision.`)),
-                await transporter.sendMail({
-                    from: '"no-reply@get2basket.com" <Signvisionsolutionpvt@gmail.com>',
-                    to: isUser.username,
-                    subject: subject,
-                    html: mailOption
-                })
-            ]).then(result => {
-                cb(null, 'OTP send successfully');
-            }).catch(e => { cb(e, {}); });
+            await axios.get(config.smsGateWay.uri(isUser.phone,
+                `Hi ${isUser.fullname}, your OTP is ${otp} will expire in another 15 mins. Kindly use this for login, don't share it with anyone. Have a great day, Team SignVision.`)
+            );
+            await transporter.sendMail({
+                from: '"no-reply@get2basket.com" <Signvisionsolutionpvt@gmail.com>',
+                to: isUser.username,
+                subject: subject,
+                html: mailOption
+            });
+            cb(null, 'OTP send successfully');
         } else cb(new Error('Invalid Email address'), {});
     },
     resetPassword: async (request, cb) => {

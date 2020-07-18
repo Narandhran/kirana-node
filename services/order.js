@@ -40,22 +40,18 @@ module.exports = {
                         discount: orderObj.discount,
                         total: orderObj.total
                     }, 'order/orderConfirm.html');
-                    Promise.all([
-                        await axios.get(config.smsGateWay.uri(isUser.phone, `Hi ${isUser.fullname}, your order has been placed successfully. Kindly note the order reference number ${orderObj.orderId} for further communication. Have a great day, Team SignVision.`)),
-                        await transporter.sendMail({
-                            from: '"no-reply@get2basket.com" <Signvisionsolutionpvt@gmail.com>',
-                            to: isUser.username,
-                            subject: 'Order confirmed',
-                            html: mailOption
-                        })
-                    ]).then(async (result) => {
-                        await Cart.findOneAndRemove({ 'user_id': request.verifiedToken._id });
-                        cb(null, 'Order placed successfully');
-                    }).catch(error => {
-                        cb(error, {});
+                    await axios.get(config.smsGateWay.uri(isUser.phone,
+                        `Hi ${isUser.fullname}, your order has been placed successfully. Kindly note the order reference number ${orderObj.orderId} for further communication. Have a great day, Team SignVision.`)
+                    );
+                    await transporter.sendMail({
+                        from: '"no-reply@get2basket.com" <Signvisionsolutionpvt@gmail.com>',
+                        to: isUser.username,
+                        subject: 'Order confirmed',
+                        html: mailOption
                     });
+                    await Cart.findOneAndRemove({ 'user_id': request.verifiedToken._id });
+                    cb(null, 'Order placed successfully');
                 }
-
             });
         }
     },
@@ -72,7 +68,6 @@ module.exports = {
                     'trackingStatus': 'Processing'
                 }, { new: true })
                 .exec(async (err, result) => {
-                    console.log(JSON.stringify(result));
                     let mailOption = await generateTemplate({
                         fullname: isUser.fullname,
                         orderId: result.orderId,
@@ -81,18 +76,17 @@ module.exports = {
                         discount: result.discount,
                         total: result.total
                     }, 'order/orderConfirm.html');
-                    Promise.all([
-                        await axios.get(config.smsGateWay.uri(isUser.phone, `Hi ${isUser.fullname}, your order has been placed successfully. Kindly note the order reference number ${result.orderId} for further communication. Have a great day, Team SignVision.`)),
-                        await transporter.sendMail({
-                            from: '"no-reply@get2basket.com" <Signvisionsolutionpvt@gmail.com>',
-                            to: isUser.username,
-                            subject: 'Order confirmed',
-                            html: mailOption
-                        })
-                    ]).then(async (result) => {
-                        await Cart.findOneAndRemove({ 'user_id': request.verifiedToken._id });
-                        cb(null, 'Order placed successfully');
-                    }).catch(error => { cb(error, {}); });
+                    await axios.get(config.smsGateWay.uri(isUser.phone,
+                        `Hi ${isUser.fullname}, your order has been placed successfully. Kindly note the order reference number ${result.orderId} for further communication. Have a great day, Team SignVision.`)
+                    );
+                    await transporter.sendMail({
+                        from: '"no-reply@get2basket.com" <Signvisionsolutionpvt@gmail.com>',
+                        to: isUser.username,
+                        subject: 'Order confirmed',
+                        html: mailOption
+                    });
+                    await Cart.findOneAndRemove({ 'user_id': request.verifiedToken._id });
+                    cb(null, 'Order placed successfully');
                 });
         }
         else cb(new Error('Payment verification failed', {}));
