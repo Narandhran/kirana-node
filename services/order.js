@@ -32,7 +32,9 @@ module.exports = {
         } else {
             orderObj.trackingStatus = 'Processing';
             await Order.create(orderObj, async (err, result) => {
-                if (err) cb(new Error('Error while placing order', {}));
+                if (err) {
+                    console.log(err); cb(new Error('Error while placing order', {}));
+                }
                 else {
                     cb(null, 'Order placed successfully');
                     let mailOption = await generateTemplate({
@@ -53,7 +55,7 @@ module.exports = {
                         html: mailOption
                     });
                     await Cart.findOneAndRemove({ 'user_id': request.verifiedToken._id });
-                    await sendFcmMessagePromise(loadFcmMessage(isVendor.fcm, 'New order notification'));
+                    await sendFcmMessagePromise(await loadFcmMessage(isVendor.fcm, 'New order notification'));
                 }
             });
         }
@@ -63,6 +65,9 @@ module.exports = {
         let isVerified = await verify(razorpay_order_id, razorpay_payment_id, razorpay_signature);
         let isUser = await User.findById(request.verifiedToken._id);
         if (isVerified) {
+            cb(null, 'Order placed successfully');
+            let isVendor = await User.findById((await Shop.findById((await Order.findOne({ 'id': razorpay_order_id })).shop_id)).vendor_id);
+            await sendFcmMessagePromise(await loadFcmMessage(isVendor.fcm, 'New order notification'));
             await Order
                 .findOneAndUpdate({
                     'id': razorpay_order_id
@@ -89,7 +94,6 @@ module.exports = {
                         html: mailOption
                     });
                     await Cart.findOneAndRemove({ 'user_id': request.verifiedToken._id });
-                    cb(null, 'Order placed successfully');
                 });
         }
         else cb(new Error('Payment verification failed', {}));

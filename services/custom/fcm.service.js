@@ -4,7 +4,7 @@ var FCM = require('fcm-push');
 var serverKey = fcm.SERVER_KEY;
 var FCM = new FCM(serverKey);
 module.exports = {
-    loadFcmMessage: async (target, title, body, data) => {
+    loadFcmMessage: (target, title, body, data) => {
         return {
             registration_ids: target,
             // collapse_key: 'your_collapse_key',
