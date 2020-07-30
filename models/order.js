@@ -64,7 +64,7 @@ var orderSchema = new Schema({
         product_id: {
             type: Schema.Types.ObjectId,
             ref: 'product',
-            // autopopulate: true,
+            autopopulate: true,
             required: true
         },
         quantity: { type: Number },

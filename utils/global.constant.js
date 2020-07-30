@@ -1,4 +1,7 @@
 module.exports = {
+    fcm: {
+        SERVER_KEY: 'AAAAwI-1_uM:APA91bGaEAQp5GPmHCo8gxXbyeI7CLLSs_SdGLQeiHoi-TQaeIN_1xOnZaSL2Q_OT1jp5jbrEbKkBLRfZqIwuwOUZsWY9JRvMfqna6Tp6vPbtiHQtjUgZ8SOU3tFDuDfmjnBRnEbSkwC'
+    },
     paths: {
         userDp: ''
     },

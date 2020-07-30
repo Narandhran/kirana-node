@@ -2,6 +2,7 @@ const { Order } = require('../models/order');
 const { Shop } = require('../models/shop');
 const { User } = require('../models/user');
 const { Cart } = require('../models/cart');
+const { loadFcmMessage, sendFcmMessagePromise } = require('./custom/fcm.service');
 const { alphaNumeric, autoIdGen, onlyNumber } = require('../utils/autogen');
 const { generateTemplate, transporter } = require('./custom/mailer.service');
 const { generatePdf } = require('./custom/pdf.service');
@@ -14,6 +15,7 @@ module.exports = {
     placeOrder: async (request, cb) => {
         var orderObj = { ...request.body };
         let isUser = await User.findById(request.verifiedToken._id);
+        let isVendor = await User.findById((await Shop.findById(orderObj.shop_id)).vendor_id);
         orderObj.receipt = autoIdGen(8, alphaNumeric);
         orderObj.orderId = autoIdGen(8, onlyNumber);
         orderObj.user_id = request.verifiedToken._id;
@@ -32,6 +34,7 @@ module.exports = {
             await Order.create(orderObj, async (err, result) => {
                 if (err) cb(new Error('Error while placing order', {}));
                 else {
+                    cb(null, 'Order placed successfully');
                     let mailOption = await generateTemplate({
                         fullname: isUser.fullname,
                         orderId: orderObj.orderId,
@@ -50,7 +53,7 @@ module.exports = {
                         html: mailOption
                     });
                     await Cart.findOneAndRemove({ 'user_id': request.verifiedToken._id });
-                    cb(null, 'Order placed successfully');
+                    await sendFcmMessagePromise(loadFcmMessage(isVendor.fcm, 'New order notification'));
                 }
             });
         }

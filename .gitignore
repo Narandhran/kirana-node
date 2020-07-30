@@ -6,3 +6,4 @@ resource/
 config.js
 docs/
 global.constant.js
+utils/global.constant.js
