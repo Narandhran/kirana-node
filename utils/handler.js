@@ -77,7 +77,11 @@ module.exports = {
                 break;
             case 'PromoInvalid':
                 response.status(415);
-                errorResponse = wrapError(request, 415, error.message, 'Promo Invali Error');
+                errorResponse = wrapError(request, 415, error.message, 'Promo Invalid Error');
+                break;
+            case 'UnmatchedShop':
+                response.status(415);
+                errorResponse = wrapError(request, 415, error.message, 'Shop Unmatched Error');
                 break;
             default:
                 response.status(400);

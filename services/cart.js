@@ -3,10 +3,18 @@ module.exports = {
     addToCart: async (request, cb) => {
         let cartObj = request.body;
         cartObj.user_id = request.verifiedToken._id;
-        await Cart
-            .create(cartObj, (err, result) => {
-                cb(err, result);
-            });
+        let isCart = await Cart.findOne({ 'user_id': request.verifiedToken._id });
+        if (isCart && isCart.shop_id != cartObj.shop_id) {
+            let e = new Error();
+            e.name = 'UnmatchedShop';
+            e.message = 'Shop didn\'t match';
+            cb(e, {});
+        } else {
+            await Cart
+                .create(cartObj, (err, result) => {
+                    cb(err, result);
+                });
+        }
     },
     removeCartByUser: async (request, cb) => {
         await Cart
