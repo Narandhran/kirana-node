@@ -27,6 +27,7 @@ module.exports = {
         await Cart
             .find({ 'user_id': request.verifiedToken._id })
             .populate({ path: 'product_id', select: 'product_id name pictures brand description' })
+            .populate({path: 'shop_id',select: 'deliveryFee'})
             .exec((err, result) => {
                 cb(err, result);
             });
