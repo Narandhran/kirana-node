@@ -11,14 +11,16 @@ module.exports = {
      */
     requestToAddShop: async (request, cb) => {
         let upload = loadMulter(5, 'shop').single('shop');
-        await upload(request, null, (err) => {
+        await upload(request, null, async (err) => {
             if (err)
                 cb(err, {});
             else {
                 let persisted = JSON.parse(request.body.textField);
                 persisted.vendor_id = request.verifiedToken._id;
-                console.log(request.file);
-                persisted.picture = request.file.key; Shop.create(persisted, (err, result) => {
+                // console.log(request.file);
+                persisted.picture = request.file.key;
+                persisted['location'].type = 'Point';
+                await Shop.create(persisted, (err, result) => {
                     cb(err, result);
                 });
             }
