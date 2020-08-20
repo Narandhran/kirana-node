@@ -113,7 +113,7 @@ module.exports = {
                     }
                 }
             ]),
-            await Product.find({ 'shop_id': shopId }).limit(12)
+            await Product.find({ 'shop_id': shopId })
         ]).then(response => { cb(null, response); }).catch(err => { cb(err, {}); });
     }
 };
