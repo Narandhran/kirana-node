@@ -20,8 +20,8 @@ module.exports = {
         SERVER_PORT: '1403',
         DB_NAME: 'kiranashop',
         DB_PORT: '3669',
-        DB_HOST: 'mongodb://52.66.226.142',
-        GET_RESOURCE_BASE_PATH: 'http://52.66.226.142/kirana-resources/',
+        DB_HOST: 'mongodb://13.235.62.196',
+        GET_RESOURCE_BASE_PATH: 'http://13.235.62.196/kirana-resources/',
         POST_RESOURCE_BASE_PATH: '/var/www/html/kirana-resources/',
         smsGateWay: {
             uri: (mobile, message) => {
